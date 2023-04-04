@@ -1,12 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import { Dialog } from '@rneui/themed';
+import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
+import firebaseConfig from '../FirebaseConfig';
+import { initializeApp } from 'firebase/app';
+import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+ref(database, 'testresults/')
 
 export default function AddDog(props){
-    const {testInformation, setTestInformation, testList, setTestList} = props;
+    const {testInformation, setTestInformation, testList, setTestList,} = props;
+    const [visible, setVisible] =useState(false);
 
     const addDog = () =>{
-        setTestList([...testList, testInformation]);
-        setTestInformation({  date:'', 
+        push(
+            ref(database, 'testresults/'),
+            {'testInformation': testInformation});
+        toggleDialog();        
+       setTestInformation({  
         date:'', 
         place:'',
         breed:'',
@@ -24,13 +38,26 @@ export default function AddDog(props){
         result:'',
       });
       };
+
+      const toggleDialog =()=>{
+        setVisible(!visible);
+      };
       
+     
       console.log(testList)
 
       return(
         <View style={styles.container}>
             <View style={{flex:1, marginTop:50}}>
-            <TextInput
+            <Button 
+            title='ADD A NEW DOG'
+            onPress={toggleDialog}/>
+            </View>
+            <View>
+            <Dialog isVisible={visible} onBackdropPress={toggleDialog} >
+                <View style={styles.dialog}>
+                <DialogTitle title='Add a new dog'/>               
+           <TextInput
                 placeholder='Date'
                 style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.date}
@@ -117,13 +144,20 @@ export default function AddDog(props){
                 placeholder='Result'
                 style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.result}
-                onChangeText={text =>setTestInformation({...testInformation, result:text})}/>
+                onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor:'silver' }}>
+            <Button
+            title='Cancel'
+            onPress={toggleDialog}        
+            />
             <Button
             title='ADD DOG'
             onPress={addDog}
             />
             </View>
-
+            </Dialog>
+            </View>
         </View>
       )
       
@@ -135,6 +169,11 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent:'center',
+     
     },
+
+    dialog:{
+      backgroundColor: 'silver'  
+    }
   });
   
