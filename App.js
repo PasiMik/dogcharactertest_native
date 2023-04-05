@@ -17,7 +17,7 @@ const [testInformation, setTestInformation]= useState({
   date:'', 
   place:'',
   breed:'',
-  name:'',
+  offname:'',
   registration:'',
   capability:'',
   behaviour:'',
@@ -33,7 +33,7 @@ const [testInformation, setTestInformation]= useState({
 
 const [testList, setTestList] = useState([]);
 
-useEffect(() => {
+/*useEffect(() => {
   const itemsRef = ref(database, 'testresults/');
   onValue(itemsRef, (snapshot) => {
   const data = snapshot.val();
@@ -52,7 +52,7 @@ useEffect(() => {
   };
 
 
-console.log(testList)
+console.log(testList)*/
 
 
   return (
@@ -69,7 +69,7 @@ console.log(testList)
         setTestList={setTestList}
         />
       </View>    
-      <View>
+      <View style={{flex:1}}>
       <DeleteAndEditDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
@@ -84,7 +84,6 @@ console.log(testList)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
   },
 });

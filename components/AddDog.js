@@ -9,7 +9,7 @@ import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-ref(database, 'testresults/')
+const resultRef = ref(database, 'testresults/')
 
 export default function AddDog(props){
     const {testInformation, setTestInformation, testList, setTestList,} = props;
@@ -17,14 +17,14 @@ export default function AddDog(props){
 
     const addDog = () =>{
         push(
-            ref(database, 'testresults/'),
+            resultRef,
             {'testInformation': testInformation});
         toggleDialog();        
        setTestInformation({  
         date:'', 
         place:'',
         breed:'',
-        name:'',
+        offname:'',
         registration:'',
         capability:'',
         behaviour:'',
@@ -78,8 +78,8 @@ export default function AddDog(props){
             <TextInput
                 placeholder='Official name'
                 style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
-                value={testInformation.name}
-                onChangeText={text =>setTestInformation({...testInformation, name:text})}
+                value={testInformation.offname}
+                onChangeText={text =>setTestInformation({...testInformation, offname:text})}
                 />
             <TextInput
                 placeholder='Registration number'
@@ -176,4 +176,3 @@ const styles = StyleSheet.create({
       backgroundColor: 'silver'  
     }
   });
-  
