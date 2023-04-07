@@ -4,7 +4,7 @@ import { Dialog } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import firebaseConfig from '../FirebaseConfig';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
+import { getDatabase, push, ref, onValue, update } from 'firebase/database';
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -12,17 +12,21 @@ const database = getDatabase(app);
 const resultRef = ref(database,'testresults/')
 
 export default function DeleteAndEditDog(props) {
-const {testInformation, setTestInformation, testList, setTestList,} = props;
+const {testInformation, setTestInformation, resultList, setResultList,} = props;
 const [visible, setVisible] =useState(false);
+const [dogId, setDogId] = useState('');
 
 useEffect(() => {
     onValue(resultRef, (snapshot) => {
     const data = snapshot.val();
+    console.log(data)
     let list = Object.values(data)
+    console.log(list)
     list.forEach((item, index) => {
       item.testInformation.id = Object.keys(data)[index]
     })
-    setTestList(list);
+    console.log(list)
+    setResultList(list);
     })
     }, []);
 
@@ -31,8 +35,35 @@ useEffect(() => {
       setVisible(!visible);   
     };
 
-    const updateDog = () =>{
-      
+    const populateEdit = (item) =>{
+      setDogId(item.testInformation.id);      
+      setTestInformation({
+        date:item.testInformation.date, 
+        place:item.testInformation.place,
+        breed:item.testInformation.breed,
+        offname:item.testInformation.offname,
+        registration:item.testInformation.registration,
+        capability:item.testInformation.capability,
+        behaviour:item.testInformation.behaviour,
+        defence:item.testInformation.defence,
+        fight:item.testInformation.fight,
+        nerves:item.testInformation.nerves,
+        temperament:item.testInformation.temperament,
+        hardness:item.testInformation.hardness,
+        accessibility:item.testInformation.accessibility,
+        shot:item.testInformation.shot,
+        result:item.testInformation.result,
+      })
+    };
+
+    console.log(dogId)
+    console.log(testInformation)
+
+    const updateDog = (dogId, testInformation) =>{
+      console.log(dogId)
+      const resultRef = ref(database, 'testresults/' + dogId)
+      update(resultRef, {testInformation})
+      toggleDialog();
     };
   
   
@@ -43,12 +74,12 @@ useEffect(() => {
     };
   
   
-  console.log(testList)
+  console.log(resultList)
 
   return(
     <View style={styles.container}>
     <View>
-    {testList.length>0 &&
+    {resultList.length>0 &&
   <Text style={{color:'black'}}>Date Place Breed Official name Registration number Capability to function
   Tendency to aggressive behaviour Desire for defence Desire to fight Nerves Temperament Mental hardness
   Accessibility Reaction to shots Result
@@ -56,13 +87,13 @@ useEffect(() => {
   </View>
   <View style={{flexDirection:'row'}}>
     <FlatList
-    data={testList}
+    data={resultList}
     renderItem={({item}) => (
       <View>
         <Text style={{color:'black'}}>{item.testInformation.date} {item.testInformation.place} {item.testInformation.breed} 
         {item.testInformation.name} {item.testInformation.registration} {item.testInformation.capability} {item.testInformation.behaviour} {item.testInformation.defence} {item.testInformation.fight}
         {item.testInformation.nerves} {item.testInformation.temperament} {item.testInformation.hardness} {item.testInformation.accessibility} {item.testInformation.shot} {item.testInformation.result}</Text>
-        <Text style={{color:'orange'}} onPress={toggleDialog}>Edit</Text>
+        <Text style={{color:'orange'}} onPress={()=> {toggleDialog(); populateEdit(item)}}>Edit</Text>
         <Text style={{color:'red'}} onPress={()=> deleteDog(item.testInformation.id)}>Delete</Text>
       </View>
     )}
@@ -168,6 +199,7 @@ useEffect(() => {
             />
             <Button
             title='EDIT DOG'
+            onPress={()=>updateDog(dogId, testInformation)}
             />
             </View>
             </Dialog>
@@ -184,4 +216,3 @@ const styles = StyleSheet.create({
       backgroundColor: 'silver'  
     },
   });
-  

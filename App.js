@@ -31,7 +31,7 @@ const [testInformation, setTestInformation]= useState({
   result:'',
 });
 
-const [testList, setTestList] = useState([]);
+const [resultList, setResultList] = useState([]);
 
 /*useEffect(() => {
   const itemsRef = ref(database, 'testresults/');
@@ -65,16 +65,16 @@ console.log(testList)*/
         <AddDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
-        testList={testList}
-        setTestList={setTestList}
+        resultList={resultList}
+        setResultList={setResultList}
         />
       </View>    
       <View style={{flex:1}}>
       <DeleteAndEditDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
-        testList={testList}
-        setTestList={setTestList}
+        resultList={resultList}
+        setResultList={setResultList}
         />
       </View>      
       </View>

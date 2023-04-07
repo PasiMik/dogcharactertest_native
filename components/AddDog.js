@@ -12,7 +12,7 @@ const database = getDatabase(app);
 const resultRef = ref(database, 'testresults/')
 
 export default function AddDog(props){
-    const {testInformation, setTestInformation, testList, setTestList,} = props;
+    const {testInformation, setTestInformation, resultList, setResultList,} = props;
     const [visible, setVisible] =useState(false);
 
     const addDog = () =>{
@@ -44,7 +44,7 @@ export default function AddDog(props){
       };
       
      
-      console.log(testList)
+      //console.log(testList)
 
       return(
         <View style={styles.container}>
