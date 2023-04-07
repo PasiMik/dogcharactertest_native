@@ -41,6 +41,23 @@ export default function AddDog(props){
 
       const toggleDialog =()=>{
         setVisible(!visible);
+        setTestInformation({  
+            date:'', 
+            place:'',
+            breed:'',
+            offname:'',
+            registration:'',
+            capability:'',
+            behaviour:'',
+            defence:'',
+            fight:'',
+            nerves:'',
+            temperament:'',
+            hardness:'',
+            accessibility:'',
+            shot:'',
+            result:'',
+          }); 
       };
       
      
@@ -68,77 +85,90 @@ export default function AddDog(props){
                 <DialogTitle title='Add a new dog'/>               
            <Input
                 placeholder='Date'
-                label="Form"
-                labelStyle={{fontSize:20}}
+                label='Date'
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
             />      
             <Input
                 placeholder='Place'
+                label='Place'
                 value={testInformation.place}
                 onChangeText={text =>setTestInformation({...testInformation, place:text})}
             />
             <Input
                 placeholder='Breed'
+                label='Breed'
                 value={testInformation.breed}
                 onChangeText={text =>setTestInformation({...testInformation, breed:text})}
             />
             <Input
                 placeholder='Official name'
+                label='Official name'
                 value={testInformation.offname}
                 onChangeText={text =>setTestInformation({...testInformation, offname:text})}
                 />
             <Input
                 placeholder='Registration number'
+                label='Registration number'
                 value={testInformation.registration}
                 onChangeText={text =>setTestInformation({...testInformation, registration:text})}
             />
             <Input
                 placeholder='Capability to function'
+                label='Capability to function'
                 value={testInformation.capability}
                 onChangeText={text =>setTestInformation({...testInformation, capability:text})}
             />
             <Input
                 placeholder='Tendency to aggressive behaviour'
+                label='Tendency to aggressive behaviour'
                 value={testInformation.behaviour}
                 onChangeText={text =>setTestInformation({...testInformation, behaviour:text})}
             />
             <Input
                 placeholder='Desire for defence'
+                label='Desire to defence'
                 value={testInformation.defence}
                 onChangeText={text =>setTestInformation({...testInformation, defence:text})}/>
             <Input
                 placeholder='Desire to fight'
+                label='Desire to fight'
                 value={testInformation.fight}
                 onChangeText={text =>setTestInformation({...testInformation, fight:text})}
             />
             <Input
                 placeholder='Nerves'
+                label='Nerves'
                 value={testInformation.nerves}
                 onChangeText={text =>setTestInformation({...testInformation, nerves:text})}
             />
             <Input
                 placeholder='Temperamant'
+                label='Temperament'
                 value={testInformation.temperament}
                 onChangeText={text =>setTestInformation({...testInformation, temperament:text})}
             />
             <Input
                 placeholder='Mental hardness'
+                label='Mental hardness'
                 value={testInformation.hardness}
                 onChangeText={text =>setTestInformation({...testInformation, hardness:text})}
             />
             <Input
                 placeholder='Accessibility'
+                label='Accessibility'
                 value={testInformation.accessibility}
                 onChangeText={text =>setTestInformation({...testInformation, accessibility:text})}
             />
             <Input
                 placeholder='Reaction to shots'
+                label='Reaction to shots'
                 value={testInformation.shot}
                 onChangeText={text =>setTestInformation({...testInformation, shot:text})}
             />
             <Input
                 placeholder='Result'
+                label='Result'
                 value={testInformation.result}
                 onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
             </View>

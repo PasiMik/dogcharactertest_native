@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
-import { Dialog, Button, Input, ListItem } from '@rneui/themed';
+import { Dialog, Button, Input, ListItem, Icon } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import firebaseConfig from '../FirebaseConfig';
 import { initializeApp } from 'firebase/app';
@@ -32,7 +32,24 @@ useEffect(() => {
 
     
     const toggleDialog =()=>{
-      setVisible(!visible);   
+      setVisible(!visible);
+      setTestInformation({  
+        date:'', 
+        place:'',
+        breed:'',
+        offname:'',
+        registration:'',
+        capability:'',
+        behaviour:'',
+        defence:'',
+        fight:'',
+        nerves:'',
+        temperament:'',
+        hardness:'',
+        accessibility:'',
+        shot:'',
+        result:'',
+      });   
     };
 
     const populateEdit = (item) =>{
@@ -63,23 +80,6 @@ useEffect(() => {
       console.log(dogId)
       const resultRef = ref(database, 'testresults/' + dogId)
       update(resultRef, {testInformation})
-      setTestInformation({  
-        date:'', 
-        place:'',
-        breed:'',
-        offname:'',
-        registration:'',
-        capability:'',
-        behaviour:'',
-        defence:'',
-        fight:'',
-        nerves:'',
-        temperament:'',
-        hardness:'',
-        accessibility:'',
-        shot:'',
-        result:'',
-      });
       toggleDialog();
     };
   
@@ -93,31 +93,45 @@ useEffect(() => {
   
   console.log(resultList)
 
-  return(
-  <View style={styles.container}>    
-  <View style={{ width:400, backgroundColor: "rgba(0, 0, 0, 0)" }}>
+  return(    
+  <View style={styles.container}>
+  <View>
     <FlatList
     data={resultList}    
     renderItem={({item}) => 
-    <ListItem>
+    <ListItem
+    bottomDivider
+    containerStyle={{backgroundColor:'transparent', width:600,}}
+    >
       <ListItem.Content>
-        <ListItem.Title>Registration number: <Text style={{color:'blue'}}>{item.testInformation.registration}</Text></ListItem.Title>
-        <ListItem.Title>Official name: {item.testInformation.offname}</ListItem.Title>
-        <ListItem.Title>Breed: {item.testInformation.breed}</ListItem.Title>
-        <ListItem.Title>Date: {item.testInformation.date}</ListItem.Title>
-        <ListItem.Title>Place: {item.testInformation.place}</ListItem.Title>
-        <ListItem.Subtitle>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
-        <ListItem.Subtitle>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
-        <ListItem.Subtitle>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
-        <ListItem.Subtitle>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
-        <ListItem.Subtitle>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
-        <ListItem.Subtitle>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
-        <ListItem.Subtitle>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
-        <ListItem.Subtitle>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
-        <ListItem.Subtitle>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
-        <ListItem.Subtitle>Result:{item.testInformation.result}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'orange'}} onPress={()=> {toggleDialog(); populateEdit(item)}}>Edit</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'red'}} onPress={()=> deleteDog(item.testInformation.id)}>Delete</ListItem.Subtitle>
+        <ListItem.Title style={{color:'white'}}>Registration number: <Text style={{color:'blue'}}>{item.testInformation.registration}</Text></ListItem.Title>
+        <ListItem.Title style={{color:'white'}}>Official name: {item.testInformation.offname}</ListItem.Title>
+        <ListItem.Title style={{color:'white'}}>Breed: {item.testInformation.breed}</ListItem.Title>
+        <ListItem.Title style={{color:'white'}}>Date: {item.testInformation.date}</ListItem.Title>
+        <ListItem.Title style={{color:'white'}}>Place: {item.testInformation.place}</ListItem.Title>
+        <ListItem.Subtitle style={{color:'white'}}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'white'}}>Result:{item.testInformation.result}</ListItem.Subtitle>
+        <View style={{flexDirection:'row',}}>
+        <Button
+        title='Edit'
+        buttonStyle={styles.editbutton}
+        onPress={()=> {toggleDialog(); populateEdit(item)}}        
+        />
+        <Button
+        title='Delete'
+        buttonStyle={styles.deletebutton}
+        onPress={()=> deleteDog(item.testInformation.id)}       
+        />
+        </View>
+        
     </ListItem.Content>
     </ListItem>}
     />
@@ -129,77 +143,91 @@ useEffect(() => {
                 <DialogTitle title='Edit the dog'/>               
            <Input
                 placeholder='Date'
-                label="Form"
+                label='Date'
                 labelStyle={{fontSize:20}}
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
             />      
             <Input
                 placeholder='Place'
+                label='Place'
                 value={testInformation.place}
                 onChangeText={text =>setTestInformation({...testInformation, place:text})}
                         />
             <Input
                 placeholder='Breed'
+                label='Breed'
                 value={testInformation.breed}
                 onChangeText={text =>setTestInformation({...testInformation, breed:text})}
             />
             <Input
                 placeholder='Official name'
+                label='Official name'
                 value={testInformation.offname}
                 onChangeText={text =>setTestInformation({...testInformation, offname:text})}
                 />
             <Input
                 placeholder='Registration number'
+                label='Registration number'
                 value={testInformation.registration}
                 onChangeText={text =>setTestInformation({...testInformation, registration:text})}
             />
             <Input
                 placeholder='Capability to function'
+                label='Capability to function'
                 value={testInformation.capability}
                 onChangeText={text =>setTestInformation({...testInformation, capability:text})}
             />
             <Input
                 placeholder='Tendency to aggressive behaviour'
+                label='Tendency to aggressive behaviour'
                 value={testInformation.behaviour}
                 onChangeText={text =>setTestInformation({...testInformation, behaviour:text})}
             />
             <Input
                 placeholder='Desire for defence'
+                label='Desire to defence'
                 value={testInformation.defence}
                 onChangeText={text =>setTestInformation({...testInformation, defence:text})}/>
             <Input
                 placeholder='Desire to fight'
+                label='Desire to fight'
                 value={testInformation.fight}
                 onChangeText={text =>setTestInformation({...testInformation, fight:text})}
             />
             <Input
                 placeholder='Nerves'
+                label='Nerves'
                 value={testInformation.nerves}
                 onChangeText={text =>setTestInformation({...testInformation, nerves:text})}
             />
             <Input
                 placeholder='Temperamant'
+                label='Temperament'
                 value={testInformation.temperament}
                 onChangeText={text =>setTestInformation({...testInformation, temperament:text})}
             />
             <Input
                 placeholder='Mental hardness'
+                label='Mental hardness'
                 value={testInformation.hardness}
                 onChangeText={text =>setTestInformation({...testInformation, hardness:text})}
             />
             <Input
                 placeholder='Accessibility'
+                label='Accessibility'
                 value={testInformation.accessibility}
                 onChangeText={text =>setTestInformation({...testInformation, accessibility:text})}
             />
             <Input
                 placeholder='Reaction to shots'
+                label='Reaction to shots'
                 value={testInformation.shot}
                 onChangeText={text =>setTestInformation({...testInformation, shot:text})}
             />
             <Input
                 placeholder='Result'
+                label="Result"
                 value={testInformation.result}
                 onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
             </View>
@@ -266,5 +294,11 @@ const styles = StyleSheet.create({
       borderColor: 'transparent',
       borderWidth: 0,
       borderRadius: 30,
+  },
+  deletebutton:{
+    backgroundColor:'red',    
+    borderColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 30,
   },
   });
