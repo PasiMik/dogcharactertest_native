@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
-import { Dialog, Button, Input } from '@rneui/themed';
+import { Dialog, Button, Input, ListItem } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import firebaseConfig from '../FirebaseConfig';
 import { initializeApp } from 'firebase/app';
@@ -94,26 +94,32 @@ useEffect(() => {
   console.log(resultList)
 
   return(
-    <View style={styles.container}>
-    <View>
-    {resultList.length>0 &&
-  <Text style={{color:'black'}}>Date Place Breed Official name Registration number Capability to function
-  Tendency to aggressive behaviour Desire for defence Desire to fight Nerves Temperament Mental hardness
-  Accessibility Reaction to shots Result
-   </Text>}
-  </View>
-  <View style={{flexDirection:'row'}}>
+  <View style={styles.container}>    
+  <View style={{ width:400, backgroundColor: "rgba(0, 0, 0, 0)" }}>
     <FlatList
-    data={resultList}
-    renderItem={({item}) => (
-      <View>
-        <Text style={{color:'black'}}>{item.testInformation.date} {item.testInformation.place} {item.testInformation.breed} 
-        {item.testInformation.name} {item.testInformation.registration} {item.testInformation.capability} {item.testInformation.behaviour} {item.testInformation.defence} {item.testInformation.fight}
-        {item.testInformation.nerves} {item.testInformation.temperament} {item.testInformation.hardness} {item.testInformation.accessibility} {item.testInformation.shot} {item.testInformation.result}</Text>
-        <Text style={{color:'orange'}} onPress={()=> {toggleDialog(); populateEdit(item)}}>Edit</Text>
-        <Text style={{color:'red'}} onPress={()=> deleteDog(item.testInformation.id)}>Delete</Text>
-      </View>
-    )}
+    data={resultList}    
+    renderItem={({item}) => 
+    <ListItem>
+      <ListItem.Content>
+        <ListItem.Title>Registration number: <Text style={{color:'blue'}}>{item.testInformation.registration}</Text></ListItem.Title>
+        <ListItem.Title>Official name: {item.testInformation.offname}</ListItem.Title>
+        <ListItem.Title>Breed: {item.testInformation.breed}</ListItem.Title>
+        <ListItem.Title>Date: {item.testInformation.date}</ListItem.Title>
+        <ListItem.Title>Place: {item.testInformation.place}</ListItem.Title>
+        <ListItem.Subtitle>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
+        <ListItem.Subtitle>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
+        <ListItem.Subtitle>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
+        <ListItem.Subtitle>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
+        <ListItem.Subtitle>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
+        <ListItem.Subtitle>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
+        <ListItem.Subtitle>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
+        <ListItem.Subtitle>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
+        <ListItem.Subtitle>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
+        <ListItem.Subtitle>Result:{item.testInformation.result}</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'orange'}} onPress={()=> {toggleDialog(); populateEdit(item)}}>Edit</ListItem.Subtitle>
+        <ListItem.Subtitle style={{color:'red'}} onPress={()=> deleteDog(item.testInformation.id)}>Delete</ListItem.Subtitle>
+    </ListItem.Content>
+    </ListItem>}
     />
   </View>
   <View>
@@ -197,7 +203,7 @@ useEffect(() => {
                 value={testInformation.result}
                 onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor:'silver' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
             <Button
             title='Cancel'
             buttonStyle={styles.cancelbutton}
