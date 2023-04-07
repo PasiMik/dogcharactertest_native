@@ -5,6 +5,7 @@ import DeleteAndEditDog from './components/DeleteAndEditDog';
 import firebaseConfig from './FirebaseConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
+import { Header} from '@rneui/themed';
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -33,26 +34,6 @@ const [testInformation, setTestInformation]= useState({
 
 const [resultList, setResultList] = useState([]);
 
-/*useEffect(() => {
-  const itemsRef = ref(database, 'testresults/');
-  onValue(itemsRef, (snapshot) => {
-  const data = snapshot.val();
-  let list = Object.values(data)
-  list.forEach((item, index) => {
-    item.testInformation.id = Object.keys(data)[index]
-  })
-  setTestList(list);
-  })
-  }, []);
-
-  const deleteDog =(id)=>{
-    const itemsRef = ref(database, 'testresults/' + id)
-    remove(itemsRef);
-
-  };
-
-
-console.log(testList)*/
 
 
   return (
@@ -61,7 +42,11 @@ console.log(testList)*/
       <ImageBackground
       source={require('./assets/Jetro_head.jpg')}
       style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}/>
-      <View style={{flex:1, marginTop:50}}>
+      <Header 
+      centerComponent={{text:'Dog character app ', style:styles.header}} 
+      backgroundColor='black'
+      />
+        <View style={{flex:1}}>
         <AddDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
@@ -69,7 +54,7 @@ console.log(testList)*/
         setResultList={setResultList}
         />
       </View>    
-      <View style={{flex:1}}>
+      <View style={{flex:6}}>
       <DeleteAndEditDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
@@ -85,5 +70,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  header:{
+    fontSize:16,
+    color:'white'
   },
 });

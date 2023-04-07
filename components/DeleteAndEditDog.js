@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
-import { Dialog } from '@rneui/themed';
+import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
+import { Dialog, Button, Input } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import firebaseConfig from '../FirebaseConfig';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, push, ref, onValue, update } from 'firebase/database';
+import { getDatabase, push, ref, onValue, update,remove } from 'firebase/database';
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -63,6 +63,23 @@ useEffect(() => {
       console.log(dogId)
       const resultRef = ref(database, 'testresults/' + dogId)
       update(resultRef, {testInformation})
+      setTestInformation({  
+        date:'', 
+        place:'',
+        breed:'',
+        offname:'',
+        registration:'',
+        capability:'',
+        behaviour:'',
+        defence:'',
+        fight:'',
+        nerves:'',
+        temperament:'',
+        hardness:'',
+        accessibility:'',
+        shot:'',
+        result:'',
+      });
       toggleDialog();
     };
   
@@ -101,107 +118,112 @@ useEffect(() => {
   </View>
   <View>
             <Dialog isVisible={visible} onBackdropPress={toggleDialog} >
-                <View style={styles.dialog}>
-                <DialogTitle title='Edit dog'/>               
-           <TextInput
+            <ScrollView style={styles.scrollview}>
+                <View>
+                <DialogTitle title='Edit the dog'/>               
+           <Input
                 placeholder='Date'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
+                label="Form"
+                labelStyle={{fontSize:20}}
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
             />      
-            <TextInput
+            <Input
                 placeholder='Place'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.place}
                 onChangeText={text =>setTestInformation({...testInformation, place:text})}
                         />
-            <TextInput
+            <Input
                 placeholder='Breed'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.breed}
                 onChangeText={text =>setTestInformation({...testInformation, breed:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Official name'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.offname}
                 onChangeText={text =>setTestInformation({...testInformation, offname:text})}
                 />
-            <TextInput
+            <Input
                 placeholder='Registration number'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.registration}
                 onChangeText={text =>setTestInformation({...testInformation, registration:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Capability to function'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.capability}
                 onChangeText={text =>setTestInformation({...testInformation, capability:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Tendency to aggressive behaviour'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.behaviour}
                 onChangeText={text =>setTestInformation({...testInformation, behaviour:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Desire for defence'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.defence}
                 onChangeText={text =>setTestInformation({...testInformation, defence:text})}/>
-            <TextInput
+            <Input
                 placeholder='Desire to fight'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.fight}
                 onChangeText={text =>setTestInformation({...testInformation, fight:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Nerves'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.nerves}
                 onChangeText={text =>setTestInformation({...testInformation, nerves:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Temperamant'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.temperament}
                 onChangeText={text =>setTestInformation({...testInformation, temperament:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Mental hardness'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.hardness}
                 onChangeText={text =>setTestInformation({...testInformation, hardness:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Accessibility'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.accessibility}
                 onChangeText={text =>setTestInformation({...testInformation, accessibility:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Reaction to shots'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.shot}
                 onChangeText={text =>setTestInformation({...testInformation, shot:text})}
             />
-            <TextInput
+            <Input
                 placeholder='Result'
-                style={{width:220, borderColor: "gray", borderWidth:1, color:'white'}}
                 value={testInformation.result}
                 onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor:'silver' }}>
             <Button
             title='Cancel'
+            buttonStyle={styles.cancelbutton}
+            iconRight
+            icon = {{
+                name: 'times',
+                type: 'font-awesome',
+                size: 15,
+                color: 'white',
+            }}
             onPress={toggleDialog}        
             />
             <Button
             title='EDIT DOG'
+            buttonStyle={styles.editbutton}
+            iconRight
+            icon = {{
+                name: 'pencil',
+                type: 'font-awesome',
+                size: 15,
+                color: 'white',
+            }}
             onPress={()=>updateDog(dogId, testInformation)}
             />
             </View>
+            </ScrollView>
             </Dialog>
             </View>
   </View>
@@ -212,7 +234,31 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
     },
-    dialog:{
-      backgroundColor: 'silver'  
+    scrollview:{
+      backgroundColor: '#E5E4E2', 
+      marginHorizontal:-20,
+      marginVertical:-20,
     },
+    addbuttoncontainer:{
+        flex:1,
+        marginTop:20,
+    },
+    addbutton:{
+        backgroundColor:'green',    
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: 30,
+    },
+    cancelbutton:{
+        backgroundColor:'orange',    
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: 30,
+    },
+    editbutton:{
+      backgroundColor:'gold',    
+      borderColor: 'transparent',
+      borderWidth: 0,
+      borderRadius: 30,
+  },
   });
