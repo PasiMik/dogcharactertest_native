@@ -17,7 +17,6 @@ const resultRef = ref(database, 'testresults/')
 export default function AddDog(props){
     const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate} = props;
     const [visible, setVisible] = useState(false);
-    //const [testDate, setTestDate]= useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
@@ -269,13 +268,13 @@ const styles = StyleSheet.create({
         marginTop:20,
     },
     addbutton:{
-        backgroundColor:'green',    
+        backgroundColor:'#32CD32',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
     },
     cancelbutton:{
-        backgroundColor:'orange',    
+        backgroundColor:'#FFA500',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,

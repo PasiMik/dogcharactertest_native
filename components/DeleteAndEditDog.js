@@ -1,7 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
 import { Dialog, Button, Input, ListItem, Icon } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
+import * as WebBrowser from 'expo-web-browser';
+import MapView, {Marker} from 'react-native-maps';
+import {MAP_API_TOKEN} from '@env';
 import firebaseConfig from '../FirebaseConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue, update,remove } from 'firebase/database';
@@ -11,12 +14,24 @@ const database = getDatabase(app);
 
 const resultRef = ref(database,'testresults/')
 
+
 export default function DeleteAndEditDog(props) {
 const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate,} = props;
 const [visible, setVisible] =useState(false);
 const [dogId, setDogId] = useState('');
 const [mode, setMode] = useState('date');
 const [show, setShow] = useState(false);
+const [registerNumber, setRegisterNumber] = useState('');
+const [place, setPlace] =useState('');
+const [dialogVisible, setDialogVisible] = useState(false)
+const[foundPlace, setFoundPlace]=useState({
+  latitude: 60.17116,
+  longitude: 24.93265,
+  place:'Helsinki',
+  latitudeDelta: 1,
+  longitudeDelta: 1,
+});
+
 
 useEffect(() => {
     onValue(resultRef, (snapshot) => {
@@ -70,6 +85,11 @@ useEffect(() => {
       showMode('date');
     };
 
+    const handleWebBrowser = async(registerNumber)=>{
+      await WebBrowser.openBrowserAsync(`https://jalostus.kennelliitto.fi/frmKoira.aspx?RekNo=${registerNumber}&R=342`);
+    
+    };
+
 
     const populateEdit = (item) =>{
       setDogId(item.testInformation.id);      
@@ -108,6 +128,40 @@ useEffect(() => {
       remove(resultRef);
   
     };
+
+    const mapRef =useRef();
+
+    const findPlace=(place)=>{
+      fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=${MAP_API_TOKEN}&location=${place}`)
+      .then(response => response.json())
+      .then(data=>{
+          setFoundPlace({
+              latitude: data.results[0].locations[0].displayLatLng.lat,
+              longitude:data.results[0].locations[0].displayLatLng.lng,
+              place: data.results[0].locations[0].adminArea5,
+              latitudeDelta: 1,
+              longitudeDelta: 1,
+          })
+          
+  
+      })
+      .catch(err => console.error(err))
+  };
+
+  const openDialog =(place)=>{
+    setDialogVisible(true);
+    findPlace(place);
+    
+};
+  
+  
+  const closeDialog =()=>{
+      setDialogVisible(false);
+      setPlace('');  
+      
+  };
+
+  
   
   
   console.log(resultList)
@@ -115,6 +169,7 @@ useEffect(() => {
   return(    
   <View style={styles.container}>
   <View>
+    <Text>{registerNumber}</Text>
     <FlatList
     data={resultList}    
     renderItem={({item}) => 
@@ -123,11 +178,11 @@ useEffect(() => {
     containerStyle={{backgroundColor:'transparent', width:400,}}
     >
       <ListItem.Content>
-        <ListItem.Title style={{color:'white'}}>Registration number: <Text style={{color:'blue'}}>{item.testInformation.registration}</Text></ListItem.Title>
+        <ListItem.Title style={{color:'white'}}>Registration number: <Text style={{color: 'blue'}}onPress={()=>{handleWebBrowser(item.testInformation.registration)}}>{item.testInformation.registration}</Text></ListItem.Title>
         <ListItem.Title style={{color:'white'}}>Official name: {item.testInformation.offname}</ListItem.Title>
         <ListItem.Title style={{color:'white'}}>Breed: {item.testInformation.breed}</ListItem.Title>
         <ListItem.Title style={{color:'white'}}>Date: {item.testInformation.date}</ListItem.Title>
-        <ListItem.Title style={{color:'white'}}>Place: {item.testInformation.place}</ListItem.Title>
+        <ListItem.Title style={{color:'white'}}>Place: <Text style={{color:'blue'}} onPress={()=>openDialog(item.testInformation.place)}>{item.testInformation.place}</Text></ListItem.Title>
         <ListItem.Subtitle style={{color:'white'}}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
         <ListItem.Subtitle style={{color:'white'}}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
         <ListItem.Subtitle style={{color:'white'}}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
@@ -143,11 +198,25 @@ useEffect(() => {
         <Button
         title='Edit'
         buttonStyle={[styles.editbutton, {marginHorizontal: 5}]}
+        iconRight
+        icon = {{
+            name: 'pencil',
+            type: 'font-awesome',
+            size: 15,
+            color: 'white',
+        }}
         onPress={()=> {toggleDialog(); populateEdit(item)}}        
         />
         <Button
         title='Delete'
         buttonStyle={[styles.deletebutton, {marginHorizontal: 5}]}
+        iconRight
+        icon = {{
+            name: 'trash',
+            type: 'font-awesome-5',
+            size: 15,
+            color: 'white',
+        }}
         onPress={()=> deleteDog(item.testInformation.id)}       
         />
         </View>        
@@ -299,7 +368,38 @@ useEffect(() => {
              mode={mode}
              onChange={onChange}
         />
-        )} 
+        )}
+         <View>
+            <Dialog isVisible={dialogVisible} onBackdropPress={closeDialog} overlayStyle={{backgroundColor:'#E5E4E2', height:'60%', }}>
+                <DialogTitle title='Place of test'/>
+                <View style={{height:'85%'}}>
+                <MapView 
+                ref={mapRef}
+                style={{width:'100%', height:'100%'}}
+                region={foundPlace}>
+                <Marker
+                coordinate={{
+                latitude: Number(foundPlace.latitude),
+                longitude: Number(foundPlace.longitude)
+                }}
+                title={foundPlace.place}/>
+            </MapView>                    
+                </View>
+                <View>
+                <Button 
+                buttonStyle={styles.closebutton}
+                title='Close'
+                iconRight
+                icon = {{
+                  name: 'times',
+                  type: 'font-awesome',
+                  size: 15,
+                  color: 'white',
+              }} 
+                onPress={closeDialog} />
+                </View>
+            </Dialog>
+            </View>
   </View>
   )
 }
@@ -318,27 +418,34 @@ const styles = StyleSheet.create({
         marginTop:20,
     },
     addbutton:{
-        backgroundColor:'green',    
+        backgroundColor:'#32CD32',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
     },
     cancelbutton:{
-        backgroundColor:'orange',    
+        backgroundColor:'#FFA500',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
     },
     editbutton:{
-      backgroundColor:'gold',    
+      backgroundColor:'#FFD700',    
       borderColor: 'transparent',
       borderWidth: 0,
       borderRadius: 30,
   },
   deletebutton:{
-    backgroundColor:'red',    
+    backgroundColor:'#FF2400',    
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 30,
+  },
+  closebutton:{
+    backgroundColor:'#FFA500',    
+    borderColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 30,
+    alignItems: 'center',
   },
   });
