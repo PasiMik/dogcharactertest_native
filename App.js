@@ -33,6 +33,7 @@ const [testInformation, setTestInformation]= useState({
 });
 
 const [resultList, setResultList] = useState([]);
+const [testDate, setTestDate]= useState(new Date());
 
 
 
@@ -52,14 +53,18 @@ const [resultList, setResultList] = useState([]);
         setTestInformation={setTestInformation}
         resultList={resultList}
         setResultList={setResultList}
+        testDate={testDate}
+        setTestDate={setTestDate}
         />
-      </View>    
-      <View style={{flex:6}}>
+      </View>   
+      <View style={{flex:10}}>
       <DeleteAndEditDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
         resultList={resultList}
         setResultList={setResultList}
+        testDate={testDate}
+        setTestDate={setTestDate}
         />
       </View>      
       </View>

@@ -12,9 +12,11 @@ const database = getDatabase(app);
 const resultRef = ref(database,'testresults/')
 
 export default function DeleteAndEditDog(props) {
-const {testInformation, setTestInformation, resultList, setResultList,} = props;
+const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate,} = props;
 const [visible, setVisible] =useState(false);
 const [dogId, setDogId] = useState('');
+const [mode, setMode] = useState('date');
+const [show, setShow] = useState(false);
 
 useEffect(() => {
     onValue(resultRef, (snapshot) => {
@@ -51,6 +53,23 @@ useEffect(() => {
         result:'',
       });   
     };
+
+    const onChange = (e, selectedDate)=>{
+      const currentDate = selectedDate
+      setShow(false);
+      setTestDate(currentDate)
+      setTestInformation({...testInformation, date: currentDate.toLocaleDateString()});
+  };
+  
+  const showMode = (currentMode) => {
+      setShow(true);
+      setMode(currentMode);
+    };
+  
+  const showDatepicker = () => {
+      showMode('date');
+    };
+
 
     const populateEdit = (item) =>{
       setDogId(item.testInformation.id);      
@@ -101,7 +120,7 @@ useEffect(() => {
     renderItem={({item}) => 
     <ListItem
     bottomDivider
-    containerStyle={{backgroundColor:'transparent', width:600,}}
+    containerStyle={{backgroundColor:'transparent', width:400,}}
     >
       <ListItem.Content>
         <ListItem.Title style={{color:'white'}}>Registration number: <Text style={{color:'blue'}}>{item.testInformation.registration}</Text></ListItem.Title>
@@ -119,19 +138,19 @@ useEffect(() => {
         <ListItem.Subtitle style={{color:'white'}}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
         <ListItem.Subtitle style={{color:'white'}}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
         <ListItem.Subtitle style={{color:'white'}}>Result:{item.testInformation.result}</ListItem.Subtitle>
-        <View style={{flexDirection:'row',}}>
+        <View style={{flex:1, flexDirection:'row', justifyContent: 'flex-end'}}>
+        <View style={{flex: 1}} />
         <Button
         title='Edit'
-        buttonStyle={styles.editbutton}
+        buttonStyle={[styles.editbutton, {marginHorizontal: 5}]}
         onPress={()=> {toggleDialog(); populateEdit(item)}}        
         />
         <Button
         title='Delete'
-        buttonStyle={styles.deletebutton}
+        buttonStyle={[styles.deletebutton, {marginHorizontal: 5}]}
         onPress={()=> deleteDog(item.testInformation.id)}       
         />
-        </View>
-        
+        </View>        
     </ListItem.Content>
     </ListItem>}
     />
@@ -140,14 +159,28 @@ useEffect(() => {
             <Dialog isVisible={visible} onBackdropPress={toggleDialog} >
             <ScrollView style={styles.scrollview}>
                 <View>
-                <DialogTitle title='Edit the dog'/>               
+                <DialogTitle title='Edit the dog'/>
+                <View style={{flexDirection:'row', marginRight:55}}>                
            <Input
                 placeholder='Date'
                 label='Date'
                 labelStyle={{fontSize:20}}
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
-            />      
+            /> 
+             <View style={{alignContent:'flex-start', width:50,}}>
+            <Button
+            iconRight
+            icon = {{
+                name: 'calendar',
+                type: 'font-awesome',
+                size: 15,
+                color: 'white',
+            }}
+            onPress={showDatepicker}
+            />
+            </View>
+            </View>       
             <Input
                 placeholder='Place'
                 label='Place'
@@ -260,6 +293,13 @@ useEffect(() => {
             </ScrollView>
             </Dialog>
             </View>
+            {show && (
+        <DateTimePicker
+             value={testDate}
+             mode={mode}
+             onChange={onChange}
+        />
+        )} 
   </View>
   )
 }

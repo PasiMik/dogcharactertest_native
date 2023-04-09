@@ -5,6 +5,9 @@ import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import firebaseConfig from '../FirebaseConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -12,8 +15,11 @@ const database = getDatabase(app);
 const resultRef = ref(database, 'testresults/')
 
 export default function AddDog(props){
-    const {testInformation, setTestInformation, resultList, setResultList,} = props;
-    const [visible, setVisible] =useState(false);
+    const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate} = props;
+    const [visible, setVisible] = useState(false);
+    //const [testDate, setTestDate]= useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
 
     const addDog = () =>{
         push(
@@ -59,6 +65,22 @@ export default function AddDog(props){
             result:'',
           }); 
       };
+
+      const onChange = (e, selectedDate)=>{
+        const currentDate = selectedDate
+        setShow(false);
+        setTestDate(currentDate)
+        setTestInformation({...testInformation, date: currentDate.toLocaleDateString()});
+    };
+    
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+      };
+    
+    const showDatepicker = () => {
+        showMode('date');
+      };
       
      
       //console.log(testList)
@@ -82,13 +104,27 @@ export default function AddDog(props){
             <Dialog isVisible={visible} onBackdropPress={toggleDialog} >
                 <ScrollView style={styles.scrollview}>
                 <View>
-                <DialogTitle title='Add a new dog'/>               
+                <DialogTitle title='Add a new dog'/>
+                <View style={{flexDirection:'row', marginRight:55}}>               
            <Input
                 placeholder='Date'
                 label='Date'
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
-            />      
+            />
+            <View style={{alignContent:'flex-start', width:50,}}>
+            <Button
+            iconRight
+            icon = {{
+                name: 'calendar',
+                type: 'font-awesome',
+                size: 15,
+                color: 'white',
+            }}
+            onPress={showDatepicker}
+            />
+            </View>
+            </View>      
             <Input
                 placeholder='Place'
                 label='Place'
@@ -200,7 +236,15 @@ export default function AddDog(props){
             </View>
             </ScrollView>
             </Dialog>
-            </View> 
+            </View>
+            {show && (
+        <DateTimePicker
+             value={testDate}
+             mode={mode}
+             onChange={onChange}
+        />
+        )} 
+
         </View>
       )
       
