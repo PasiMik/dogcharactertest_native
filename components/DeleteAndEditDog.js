@@ -5,12 +5,13 @@ import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import * as WebBrowser from 'expo-web-browser';
 import MapView, {Marker} from 'react-native-maps';
 import {MAP_API_TOKEN} from '@env';
-import firebaseConfig from '../FirebaseConfig';
-import { initializeApp } from 'firebase/app';
+//import firebaseConfig from '../FirebaseConfig';
+//import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue, update,remove } from 'firebase/database';
+import { database } from '../FirebaseConfig';
 
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+//const app = initializeApp(firebaseConfig);
+//const database = getDatabase(app);
 
 const resultRef = ref(database,'testresults/')
 
@@ -178,21 +179,21 @@ useEffect(() => {
     containerStyle={{backgroundColor:'transparent', width:400,}}
     >
       <ListItem.Content>
-        <ListItem.Title style={{color:'white'}}>Registration number: <Text style={{color: 'blue'}}onPress={()=>{handleWebBrowser(item.testInformation.registration)}}>{item.testInformation.registration}</Text></ListItem.Title>
-        <ListItem.Title style={{color:'white'}}>Official name: {item.testInformation.offname}</ListItem.Title>
-        <ListItem.Title style={{color:'white'}}>Breed: {item.testInformation.breed}</ListItem.Title>
-        <ListItem.Title style={{color:'white'}}>Date: {item.testInformation.date}</ListItem.Title>
-        <ListItem.Title style={{color:'white'}}>Place: <Text style={{color:'blue'}} onPress={()=>openDialog(item.testInformation.place)}>{item.testInformation.place}</Text></ListItem.Title>
-        <ListItem.Subtitle style={{color:'white'}}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
-        <ListItem.Subtitle style={{color:'white'}}>Result:{item.testInformation.result}</ListItem.Subtitle>
+        <ListItem.Title style={styles.listitem}>Registration number: <Text style={{color: '#FFAA33'}}onPress={()=>{handleWebBrowser(item.testInformation.registration)}}>{item.testInformation.registration}</Text></ListItem.Title>
+        <ListItem.Title style={styles.listitem}>Official name: {item.testInformation.offname}</ListItem.Title>
+        <ListItem.Title style={styles.listitem}>Breed: {item.testInformation.breed}</ListItem.Title>
+        <ListItem.Title style={styles.listitem}>Date: {item.testInformation.date}</ListItem.Title>
+        <ListItem.Title style={styles.listitem}>Place: <Text style={{color:'#FFAA33'}} onPress={()=>openDialog(item.testInformation.place)}>{item.testInformation.place}</Text></ListItem.Title>
+        <ListItem.Subtitle style={styles.listitem}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
+        <ListItem.Subtitle style={styles.listitem}>Result:{item.testInformation.result}</ListItem.Subtitle>
         <View style={{flex:1, flexDirection:'row', justifyContent: 'flex-end'}}>
         <View style={{flex: 1}} />
         <Button
@@ -372,7 +373,7 @@ useEffect(() => {
          <View>
             <Dialog isVisible={dialogVisible} onBackdropPress={closeDialog} overlayStyle={{backgroundColor:'#E5E4E2', height:'60%', }}>
                 <DialogTitle title='Place of test'/>
-                <View style={{height:'85%'}}>
+                <View style={styles.mapview}>
                 <MapView 
                 ref={mapRef}
                 style={{width:'100%', height:'100%'}}
@@ -385,7 +386,7 @@ useEffect(() => {
                 title={foundPlace.place}/>
             </MapView>                    
                 </View>
-                <View>
+                <View style ={{flexDirection: 'row', justifyContent: 'center',}}  >
                 <Button 
                 buttonStyle={styles.closebutton}
                 title='Close'
@@ -447,5 +448,17 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 30,
     alignItems: 'center',
+    marginTop:5,
+    justifyContent:'center',
   },
+  listitem:{
+    color:'#0F52BA',
+  },
+  mapview:{
+    height:'85%',
+  },
+  mapsize:{
+
+  }
+
   });
