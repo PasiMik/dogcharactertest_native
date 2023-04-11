@@ -6,7 +6,7 @@ import { auth } from '../FirebaseConfig';
 import {useNavigation} from '@react-navigation/core';
 import { Header, Icon } from '@rneui/base';
 import { TouchableOpacity } from 'react-native';
-
+import styles from '../Styles'; 
 
 export default function HomeScreen() {
 
@@ -45,21 +45,21 @@ const handleSignOut = () =>{
 
   return (
     
-    <View style={styles.container}>
+    <View style={styles.homecontainer}>
       <ImageBackground
       source={require('../assets/Jetro_head.jpg')}
-      style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}/>
+      style={styles.backgroundimage}/>
       <Header 
       leftComponent={
         <TouchableOpacity
               onPress={handleSignOut}>
-              <Icon  type="simple-line-icon" name="logout" color="white"/>
+              <Icon  type="simple-line-icon" name="logout" color="#FFFFFF"/>
               </TouchableOpacity>
       }
-      centerComponent={{text:'Dog character app ', style:styles.header}} 
-      backgroundColor='black'
+      centerComponent={{text:'Dog character app ', style:styles.header,}} 
+      backgroundColor='#000000'
       />
-        <View style={{flex:1}}>
+        <View style={styles.addposition}>
         <AddDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
@@ -69,7 +69,7 @@ const handleSignOut = () =>{
         setTestDate={setTestDate}
         />
       </View>   
-      <View style={{flex:10}}>
+      <View style={styles.deleteeditposition}>
       <DeleteAndEditDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
@@ -83,14 +83,3 @@ const handleSignOut = () =>{
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  header:{
-    fontSize:16,
-    color:'#FFFFFF',
-    backgroundColor:'#000000',
-  },
-});

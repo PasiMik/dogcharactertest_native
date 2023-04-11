@@ -4,11 +4,13 @@ import { Dialog, Button, Input, ListItem, Icon } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import * as WebBrowser from 'expo-web-browser';
 import MapView, {Marker} from 'react-native-maps';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {MAP_API_TOKEN} from '@env';
 //import firebaseConfig from '../FirebaseConfig';
 //import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue, update,remove } from 'firebase/database';
 import { database } from '../FirebaseConfig';
+import styles from '../Styles'; 
 
 //const app = initializeApp(firebaseConfig);
 //const database = getDatabase(app);
@@ -17,39 +19,39 @@ const resultRef = ref(database,'testresults/')
 
 
 export default function DeleteAndEditDog(props) {
-const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate,} = props;
-const [visible, setVisible] =useState(false);
-const [dogId, setDogId] = useState('');
-const [mode, setMode] = useState('date');
-const [show, setShow] = useState(false);
-const [registerNumber, setRegisterNumber] = useState('');
-const [place, setPlace] =useState('');
-const [dialogVisible, setDialogVisible] = useState(false)
-const[foundPlace, setFoundPlace]=useState({
-  latitude: 60.17116,
-  longitude: 24.93265,
-  place:'Helsinki',
-  latitudeDelta: 1,
-  longitudeDelta: 1,
+  const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate,} = props;
+  const [visible, setVisible] =useState(false);
+  const [dogId, setDogId] = useState('');
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [registerNumber, setRegisterNumber] = useState('');
+  const [place, setPlace] =useState('');
+  const [dialogVisible, setDialogVisible] = useState(false)
+  const [foundPlace, setFoundPlace]=useState({
+      latitude: 60.17116,
+      longitude: 24.93265,
+      place:'Helsinki',
+      latitudeDelta: 1,
+      longitudeDelta: 1,
 });
 
 
-useEffect(() => {
-    onValue(resultRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log(data)
-    let list = Object.values(data)
-    console.log(list)
-    list.forEach((item, index) => {
-      item.testInformation.id = Object.keys(data)[index]
-    })
-    console.log(list)
-    setResultList(list);
-    })
-    }, []);
+  useEffect(() => {
+      onValue(resultRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+      let list = Object.values(data)
+      console.log(list)
+      list.forEach((item, index) => {
+        item.testInformation.id = Object.keys(data)[index]
+      })
+      console.log(list)
+      setResultList(list);
+      })
+      }, []);
 
     
-    const toggleDialog =()=>{
+  const toggleDialog =()=>{
       setVisible(!visible);
       setTestInformation({  
         date:'', 
@@ -68,31 +70,31 @@ useEffect(() => {
         shot:'',
         result:'',
       });   
-    };
+  };
 
-    const onChange = (e, selectedDate)=>{
-      const currentDate = selectedDate
-      setShow(false);
-      setTestDate(currentDate)
-      setTestInformation({...testInformation, date: currentDate.toLocaleDateString()});
+  const onChange = (e, selectedDate)=>{
+        const currentDate = selectedDate
+        setShow(false);
+        setTestDate(currentDate)
+        setTestInformation({...testInformation, date: currentDate.toLocaleDateString()});
   };
   
   const showMode = (currentMode) => {
-      setShow(true);
-      setMode(currentMode);
-    };
+        setShow(true);
+        setMode(currentMode);
+  };
   
   const showDatepicker = () => {
       showMode('date');
-    };
+  };
 
-    const handleWebBrowser = async(registerNumber)=>{
+  const handleWebBrowser = async(registerNumber)=>{
       await WebBrowser.openBrowserAsync(`https://jalostus.kennelliitto.fi/frmKoira.aspx?RekNo=${registerNumber}&R=342`);
     
-    };
+  };
 
 
-    const populateEdit = (item) =>{
+  const populateEdit = (item) =>{
       setDogId(item.testInformation.id);      
       setTestInformation({
         date:item.testInformation.date, 
@@ -111,28 +113,28 @@ useEffect(() => {
         shot:item.testInformation.shot,
         result:item.testInformation.result,
       })
-    };
+  };
 
     console.log(dogId)
     console.log(testInformation)
 
-    const updateDog = (dogId, testInformation) =>{
+  const updateDog = (dogId, testInformation) =>{
       console.log(dogId)
       const resultRef = ref(database, 'testresults/' + dogId)
       update(resultRef, {testInformation})
       toggleDialog();
-    };
+  };
   
   
-    const deleteDog =(id)=>{
+  const deleteDog =(id)=>{
       const resultRef = ref(database, 'testresults/' + id)
       remove(resultRef);
   
-    };
+  };
 
-    const mapRef =useRef();
+  const mapRef =useRef();
 
-    const findPlace=(place)=>{
+  const findPlace=(place)=>{
       fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=${MAP_API_TOKEN}&location=${place}`)
       .then(response => response.json())
       .then(data=>{
@@ -153,22 +155,17 @@ useEffect(() => {
     setDialogVisible(true);
     findPlace(place);
     
-};
+  };
   
   
   const closeDialog =()=>{
       setDialogVisible(false);
-      setPlace('');  
-      
+      setPlace('');       
   };
-
-  
-  
-  
   console.log(resultList)
 
   return(    
-  <View style={styles.container}>
+  <View style={styles.editdeletecontainer}>
   <View>
     <Text>{registerNumber}</Text>
     <FlatList
@@ -176,14 +173,14 @@ useEffect(() => {
     renderItem={({item}) => 
     <ListItem
     bottomDivider
-    containerStyle={{backgroundColor:'transparent', width:400,}}
+    containerStyle={styles.listitemcontainer}
     >
       <ListItem.Content>
-        <ListItem.Title style={styles.listitem}>Registration number: <Text style={{color: '#FFAA33'}}onPress={()=>{handleWebBrowser(item.testInformation.registration)}}>{item.testInformation.registration}</Text></ListItem.Title>
+        <ListItem.Title style={styles.listitem}>Registration number: <Text style={styles.pressabletext}onPress={()=>{handleWebBrowser(item.testInformation.registration)}}>{item.testInformation.registration}</Text></ListItem.Title>
         <ListItem.Title style={styles.listitem}>Official name: {item.testInformation.offname}</ListItem.Title>
         <ListItem.Title style={styles.listitem}>Breed: {item.testInformation.breed}</ListItem.Title>
         <ListItem.Title style={styles.listitem}>Date: {item.testInformation.date}</ListItem.Title>
-        <ListItem.Title style={styles.listitem}>Place: <Text style={{color:'#FFAA33'}} onPress={()=>openDialog(item.testInformation.place)}>{item.testInformation.place}</Text></ListItem.Title>
+        <ListItem.Title style={styles.listitem}>Place: <Text style={styles.pressabletext} onPress={()=>openDialog(item.testInformation.place)}>{item.testInformation.place}</Text></ListItem.Title>
         <ListItem.Subtitle style={styles.listitem}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
         <ListItem.Subtitle style={styles.listitem}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
         <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
@@ -194,11 +191,11 @@ useEffect(() => {
         <ListItem.Subtitle style={styles.listitem}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
         <ListItem.Subtitle style={styles.listitem}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
         <ListItem.Subtitle style={styles.listitem}>Result:{item.testInformation.result}</ListItem.Subtitle>
-        <View style={{flex:1, flexDirection:'row', justifyContent: 'flex-end'}}>
-        <View style={{flex: 1}} />
+        <View style={styles.firstendbutton}>
+        <View style={styles.secondendbutton} />
         <Button
         title='Edit'
-        buttonStyle={[styles.editbutton, {marginHorizontal: 5}]}
+        buttonStyle={styles.editbuttoninlist}
         iconRight
         icon = {{
             name: 'pencil',
@@ -210,7 +207,7 @@ useEffect(() => {
         />
         <Button
         title='Delete'
-        buttonStyle={[styles.deletebutton, {marginHorizontal: 5}]}
+        buttonStyle={styles.deletebutton}
         iconRight
         icon = {{
             name: 'trash',
@@ -230,7 +227,7 @@ useEffect(() => {
             <ScrollView style={styles.scrollview}>
                 <View>
                 <DialogTitle title='Edit the dog'/>
-                <View style={{flexDirection:'row', marginRight:55}}>                
+                <View style={styles.calendarbuttonposition}>                
            <Input
                 placeholder='Date'
                 label='Date'
@@ -238,7 +235,7 @@ useEffect(() => {
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
             /> 
-             <View style={{alignContent:'flex-start', width:50,}}>
+             <View style={styles.calendarbutton}>
             <Button
             iconRight
             icon = {{
@@ -334,7 +331,7 @@ useEffect(() => {
                 value={testInformation.result}
                 onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View style={styles.bottombuttoncontainer}>
             <Button
             title='Cancel'
             buttonStyle={styles.cancelbutton}
@@ -371,12 +368,12 @@ useEffect(() => {
         />
         )}
          <View>
-            <Dialog isVisible={dialogVisible} onBackdropPress={closeDialog} overlayStyle={{backgroundColor:'#E5E4E2', height:'60%', }}>
+            <Dialog isVisible={dialogVisible} onBackdropPress={closeDialog} overlayStyle={styles.mapdialog}>
                 <DialogTitle title='Place of test'/>
                 <View style={styles.mapview}>
                 <MapView 
                 ref={mapRef}
-                style={{width:'100%', height:'100%'}}
+                style={styles.mapsize}
                 region={foundPlace}>
                 <Marker
                 coordinate={{
@@ -386,7 +383,7 @@ useEffect(() => {
                 title={foundPlace.place}/>
             </MapView>                    
                 </View>
-                <View style ={{flexDirection: 'row', justifyContent: 'center',}}  >
+                <View style ={styles.closebuttoncontainer}  >
                 <Button 
                 buttonStyle={styles.closebutton}
                 title='Close'
@@ -395,7 +392,7 @@ useEffect(() => {
                   name: 'times',
                   type: 'font-awesome',
                   size: 15,
-                  color: 'white',
+                  color: '#FFFFFF',
               }} 
                 onPress={closeDialog} />
                 </View>
@@ -404,61 +401,3 @@ useEffect(() => {
   </View>
   )
 }
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-    },
-    scrollview:{
-      backgroundColor: '#E5E4E2', 
-      marginHorizontal:-20,
-      marginVertical:-20,
-    },
-    addbuttoncontainer:{
-        flex:1,
-        marginTop:20,
-    },
-    addbutton:{
-        backgroundColor:'#32CD32',    
-        borderColor: 'transparent',
-        borderWidth: 0,
-        borderRadius: 30,
-    },
-    cancelbutton:{
-        backgroundColor:'#FFA500',    
-        borderColor: 'transparent',
-        borderWidth: 0,
-        borderRadius: 30,
-    },
-    editbutton:{
-      backgroundColor:'#FFD700',    
-      borderColor: 'transparent',
-      borderWidth: 0,
-      borderRadius: 30,
-  },
-  deletebutton:{
-    backgroundColor:'#FF2400',    
-    borderColor: 'transparent',
-    borderWidth: 0,
-    borderRadius: 30,
-  },
-  closebutton:{
-    backgroundColor:'#FFA500',    
-    borderColor: 'transparent',
-    borderWidth: 0,
-    borderRadius: 30,
-    alignItems: 'center',
-    marginTop:5,
-    justifyContent:'center',
-  },
-  listitem:{
-    color:'#0F52BA',
-  },
-  mapview:{
-    height:'85%',
-  },
-  mapsize:{
-
-  }
-
-  });

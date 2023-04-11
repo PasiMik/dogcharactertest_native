@@ -7,7 +7,7 @@ import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { database } from '../FirebaseConfig';
-
+import styles from '../Styles'; 
 
 
 //const app = initializeApp(firebaseConfig);
@@ -26,26 +26,26 @@ export default function AddDog(props){
             resultRef,
             {'testInformation': testInformation});
         toggleDialog();        
-       setTestInformation({  
-        date:'', 
-        place:'',
-        breed:'',
-        offname:'',
-        registration:'',
-        capability:'',
-        behaviour:'',
-        defence:'',
-        fight:'',
-        nerves:'',
-        temperament:'',
-        hardness:'',
-        accessibility:'',
-        shot:'',
-        result:'',
-      });
+        setTestInformation({  
+            date:'', 
+            place:'',
+            breed:'',
+            offname:'',
+            registration:'',
+            capability:'',
+            behaviour:'',
+            defence:'',
+            fight:'',
+            nerves:'',
+            temperament:'',
+            hardness:'',
+            accessibility:'',
+            shot:'',
+            result:'',
+         });
       };
 
-      const toggleDialog =()=>{
+    const toggleDialog =()=>{
         setVisible(!visible);
         setTestInformation({  
             date:'', 
@@ -63,10 +63,10 @@ export default function AddDog(props){
             accessibility:'',
             shot:'',
             result:'',
-          }); 
-      };
+        }); 
+    };
 
-      const onChange = (e, selectedDate)=>{
+    const onChange = (e, selectedDate)=>{
         const currentDate = selectedDate
         setShow(false);
         setTestDate(currentDate)
@@ -86,7 +86,7 @@ export default function AddDog(props){
       //console.log(testList)
 
       return(
-        <View style={styles.container}>
+        <View style={styles.adddogcontainer}>
             <View style={styles.addbuttoncontainer}>
             <Button 
             title='ADD A NEW DOG'
@@ -96,7 +96,7 @@ export default function AddDog(props){
                 name: 'dog',
                 type: 'font-awesome-5',
                 size: 15,
-                color: 'white',
+                color: '#FFFFFF',
             }}
             onPress={toggleDialog}/>
             </View>
@@ -105,14 +105,14 @@ export default function AddDog(props){
                 <ScrollView style={styles.scrollview}>
                 <View>
                 <DialogTitle title='Add a new dog'/>
-                <View style={{flexDirection:'row', marginRight:55}}>               
+                <View style={styles.calendarbuttonposition}>               
            <Input
                 placeholder='Date'
                 label='Date'
                 value={testInformation.date}
                 onChangeText={text =>setTestInformation({...testInformation, date:text})}
             />
-            <View style={{alignContent:'flex-start', width:50,}}>
+            <View style={styles.calendarbutton}>
             <Button
             iconRight
             icon = {{
@@ -208,7 +208,7 @@ export default function AddDog(props){
                 value={testInformation.result}
                 onChangeText={text =>setTestInformation({...testInformation, result:text})}/> 
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View style={styles.bottombuttoncontainer}>
             <Button
             title='Cancel'
             buttonStyle={styles.cancelbutton}
@@ -217,7 +217,7 @@ export default function AddDog(props){
                 name: 'times',
                 type: 'font-awesome',
                 size: 15,
-                color: 'white',
+                color: '#FFFFFF',
             }}
             onPress={toggleDialog}        
             />
@@ -229,7 +229,7 @@ export default function AddDog(props){
                 name: 'check',
                 type: 'font-awesome',
                 size: 15,
-                color: 'white',
+                color: '#FFFFFF',
             }}
             onPress={addDog}
             />
@@ -244,40 +244,7 @@ export default function AddDog(props){
              onChange={onChange}
         />
         )} 
-
         </View>
-      )
-      
-
+      ) 
 };
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent:'center',
-     
-    },
-
-    scrollview:{
-      backgroundColor: '#E5E4E2', 
-      marginHorizontal:-20,
-      marginVertical:-20,
-    },
-    addbuttoncontainer:{
-        flex:1,
-        marginTop:20,
-    },
-    addbutton:{
-        backgroundColor:'#32CD32',    
-        borderColor: 'transparent',
-        borderWidth: 0,
-        borderRadius: 30,
-    },
-    cancelbutton:{
-        backgroundColor:'#FFA500',    
-        borderColor: 'transparent',
-        borderWidth: 0,
-        borderRadius: 30,
-    },
-  });
