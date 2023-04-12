@@ -32,130 +32,138 @@ export default StyleSheet.create({
     homecontainer: {
         flex: 1,
         alignItems: 'center',
-      },
-      header:{
+    },
+    firstheadercenter:{
         fontSize:16,
         color:'#FFFFFF',
         backgroundColor:'#000000',
-      },
-      backgroundimage:{
+    },
+    secondheadercenter:{
+        fontSize:10,
+        color:'#FFFFFF',
+        backgroundColor:'#000000',
+    },
+    headerrightbutton:{
+       alignSelf:'center',                  
+    },
+    backgroundimage:{
         position: 'absolute', 
         top: 0, 
         bottom: 0, 
         left: 0, 
         right: 0
-      },
-      addposition:{
+    },
+    addposition:{
         flex:1,
-      },
-      deleteeditposition:{
+    },
+    deleteeditposition:{
         flex:10,
-      },
+    },
 
-      adddogcontainer: {
+    adddogcontainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent:'center',     
-      },
-      scrollview:{
+    },
+    scrollview:{
         backgroundColor: '#E5E4E2', 
         marginHorizontal:-20,
         marginVertical:-20,
-      },
-      addbuttoncontainer:{
+    },
+    addbuttoncontainer:{
           flex:1,
           marginTop:20,
-      },
-      addbutton:{
+    },
+    addbutton:{
           backgroundColor:'#32CD32',    
           borderColor: 'transparent',
           borderWidth: 0,
           borderRadius: 30,
-      },
-      calendarbuttonposition:{
+    },
+    calendarbuttonposition:{
           flexDirection:'row', 
           marginRight:55,
-      },
-      calendarbutton:{
+    },
+    calendarbutton:{
           alignContent:'flex-start', 
           width:50,
-      },
-      cancelbutton:{
+    },
+    cancelbutton:{
           backgroundColor:'#FFA500',    
           borderColor: 'transparent',
           borderWidth: 0,
           borderRadius: 30,
-      },
-      bottombuttoncontainer:{
+    },
+    bottombuttoncontainer:{
           flexDirection: 'row', 
           justifyContent: 'space-around',
-      },
+    },
 
-      editdeletecontainer: {
+    editdeletecontainer: {
         flex: 1,
         alignItems: 'center',
-      },
-      scrollview:{
+    },
+    scrollview:{
         backgroundColor: '#E5E4E2', 
         marginHorizontal:-20,
         marginVertical:-20,
-      },
-      listitemcontainer:{
+    },
+    listitemcontainer:{
         backgroundColor:'transparent', 
         width:400,
-      },
-      pressabletext:{
+    },
+    pressabletext:{
         color: '#FFAA33',
-      },
-      firstendbutton:{
+    },
+    firstendbutton:{
         flex:1, 
         flexDirection:'row', 
         justifyContent: 'flex-end',
-      },
-      secondendbutton:{
+    },
+    secondendbutton:{
         flex:1,
-      },
-      editbuttoninlist:{
+    },
+    editbuttoninlist:{
         backgroundColor:'#FFD700',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
         marginHorizontal: 5,
-      },
-      addbuttoncontainer:{
+    },
+    addbuttoncontainer:{
           flex:1,
           marginTop:20,
-      },
-      addbutton:{
+    },
+    addbutton:{
           backgroundColor:'#32CD32',    
           borderColor: 'transparent',
           borderWidth: 0,
           borderRadius: 30,
-      },
-      cancelbutton:{
+    },
+    cancelbutton:{
           backgroundColor:'#FFA500',    
           borderColor: 'transparent',
           borderWidth: 0,
           borderRadius: 30,
-      },
-      editbutton:{
+    },
+    editbutton:{
         backgroundColor:'#FFD700',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
-      },
-      deletebutton:{
+    },
+    deletebutton:{
         backgroundColor:'#FF2400',    
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
         marginHorizontal: 5,
-      },
-      closebuttoncontainer:{
+    },
+    closebuttoncontainer:{
         flexDirection: 'row', 
         justifyContent: 'center',
-      },
-      closebutton:{
+    },
+    closebutton:{
         backgroundColor:'#FFA500',    
         borderColor: 'transparent',
         borderWidth: 0,
@@ -163,19 +171,19 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginTop:5,
         justifyContent:'center',
-      },
-      listitem:{
+    },
+    listitem:{
         color:'#0F52BA',
-      },
-      mapdialog:{
+    },
+    mapdialog:{
         backgroundColor:'#E5E4E2', 
         height:'60%', 
-      },
-      mapview:{
+    },
+    mapview:{
         height:'85%',
-      },
-      mapsize:{
+    },
+    mapsize:{
         width:'100%', 
         height:'100%',
-      },
+    },
 });

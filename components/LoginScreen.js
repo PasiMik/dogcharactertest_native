@@ -7,13 +7,10 @@ import { auth } from '../FirebaseConfig';
 import styles from '../Styles'; 
 //import firebaseConfig from '../FirebaseConfig';
 //import { initializeApp } from 'firebase/app';
-//import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-
+//mport { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 //const app = initializeApp(firebaseConfig);
 //const auth = getAuth(app);
-
-
 
 export default function LoginScreen(){
 
@@ -31,7 +28,6 @@ export default function LoginScreen(){
         
     })
     .catch(err=>console.error(err))
-
     }, [])
 
     useEffect(()=> {
@@ -40,7 +36,6 @@ export default function LoginScreen(){
                 navigation.replace('Home')
             };
         });
-
     }, []);
 
 
@@ -81,7 +76,7 @@ export default function LoginScreen(){
                 <Avatar
                 rounded
                 size={100}
-                source={{uri: image}}
+                source={image ? { uri: image } : null}//if there is a image it will be shown, otherwise nothing
                 />
                 </View>
                 <Input

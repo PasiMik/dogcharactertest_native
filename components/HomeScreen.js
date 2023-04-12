@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import AddDog from './AddDog';
 import DeleteAndEditDog from './DeleteAndEditDog';
 import { auth } from '../FirebaseConfig';
@@ -39,9 +40,9 @@ const handleSignOut = () =>{
     })
     .catch(err =>console.error(err))
 };
-
-
-
+const openInformation= async() => {
+  await WebBrowser.openBrowserAsync('https://www.kennelliitto.fi/kasvatus-ja-terveys/koiran-luonne-ja-kayttaytyminen/luonnetesti');
+};
 
   return (
     
@@ -50,15 +51,26 @@ const handleSignOut = () =>{
       source={require('../assets/Jetro_head.jpg')}
       style={styles.backgroundimage}/>
       <Header 
+      backgroundColor='#000000'
       leftComponent={
         <TouchableOpacity
               onPress={handleSignOut}>
               <Icon  type="simple-line-icon" name="logout" color="#FFFFFF"/>
               </TouchableOpacity>
       }
-      centerComponent={{text:'Dog character app ', style:styles.header,}} 
-      backgroundColor='#000000'
-      />
+      centerComponent={
+        <View>
+          <Text style={styles.firstheadercenter}>Dog character test app</Text>
+          <Text style={styles.secondheadercenter}>User: {auth.currentUser?.email}</Text>
+        </View>
+      }
+      rightComponent={
+        <TouchableOpacity
+              style={styles.headerrightbutton}
+              onPress={openInformation}>
+              <Icon  type="font-awesome" name="info-circle" color="#FFFFFF"/>
+              </TouchableOpacity>
+      }/>
         <View style={styles.addposition}>
         <AddDog
         testInformation={testInformation}

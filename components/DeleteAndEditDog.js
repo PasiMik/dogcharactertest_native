@@ -153,10 +153,8 @@ export default function DeleteAndEditDog(props) {
 
   const openDialog =(place)=>{
     setDialogVisible(true);
-    findPlace(place);
-    
-  };
-  
+    findPlace(place);    
+  };  
   
   const closeDialog =()=>{
       setDialogVisible(false);
@@ -167,7 +165,6 @@ export default function DeleteAndEditDog(props) {
   return(    
   <View style={styles.editdeletecontainer}>
   <View>
-    <Text>{registerNumber}</Text>
     <FlatList
     data={resultList}    
     renderItem={({item}) => 
