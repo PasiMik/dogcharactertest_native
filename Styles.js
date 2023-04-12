@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    logincontainer: {
+    logincontainer: {//login styling
         flex: 1,
         alignItems:'center',
         justifyContent:'center',
@@ -29,7 +29,7 @@ export default StyleSheet.create({
         marginBottom:25,
     },
 
-    homecontainer: {
+    homecontainer: {//home styling
         flex: 1,
         alignItems: 'center',
     },
@@ -60,19 +60,15 @@ export default StyleSheet.create({
         flex:10,
     },
 
-    adddogcontainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent:'center',     
+    adddogcontainer: {//Addog styling
+        flex: 1,    
+        justifyContent:'center',
+        alignContent:'center',     
     },
     scrollview:{
         backgroundColor: '#E5E4E2', 
         marginHorizontal:-20,
         marginVertical:-20,
-    },
-    addbuttoncontainer:{
-          flex:1,
-          marginTop:20,
     },
     addbutton:{
           backgroundColor:'#32CD32',    

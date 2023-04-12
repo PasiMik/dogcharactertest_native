@@ -40,6 +40,7 @@ const handleSignOut = () =>{
     })
     .catch(err =>console.error(err))
 };
+
 const openInformation= async() => {
   await WebBrowser.openBrowserAsync('https://www.kennelliitto.fi/kasvatus-ja-terveys/koiran-luonne-ja-kayttaytyminen/luonnetesti');
 };
@@ -75,8 +76,6 @@ const openInformation= async() => {
         <AddDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
-        resultList={resultList}
-        setResultList={setResultList}
         testDate={testDate}
         setTestDate={setTestDate}
         />
