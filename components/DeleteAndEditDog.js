@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
 import { Dialog, Button, Input, ListItem, Icon } from '@rneui/themed';
-import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
+//import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import * as WebBrowser from 'expo-web-browser';
-import MapView, {Marker} from 'react-native-maps';
+//import MapView, {Marker} from 'react-native-maps';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import {MAP_API_TOKEN} from '@env';
 import EditDogDialog from './EditDogDialog';
@@ -13,6 +13,7 @@ import DeleteConfirmation from './DeleteConfirmation';
 import { getDatabase, push, ref, onValue, update,remove } from 'firebase/database';
 import { database } from '../FirebaseConfig';
 import styles from '../Styles'; 
+import MapDialog from './MapDialog';
 
 //const app = initializeApp(firebaseConfig);
 //const database = getDatabase(app);
@@ -21,11 +22,11 @@ const resultRef = ref(database,'testresults/')
 
 
 export default function DeleteAndEditDog(props) {
-    const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate,} = props;
+    const {testInformation, setTestInformation, testDate, setTestDate,} = props;
     const [visible, setVisible] =useState(false);
     const [dogId, setDogId] = useState('');
-    const [registerNumber, setRegisterNumber] = useState('');
-    const [place, setPlace] =useState('');
+    //const [registerNumber, setRegisterNumber] = useState('');
+    //const [place, setPlace] =useState('');
     const [mapDialogVisible, setMapDialogVisible] = useState(false)
     const [foundPlace, setFoundPlace]=useState({
         latitude: 60.17116,
@@ -35,22 +36,27 @@ export default function DeleteAndEditDog(props) {
         longitudeDelta: 1,
     });
     const [deleteConfirmationVisible, setDeleteConfirmationVisible] =useState(false);  
-
+    const [resultList, setResultList] = useState([]);
+   
+    
 
     useEffect(() => {
+        
         onValue(resultRef, (snapshot) => {
         const data = snapshot.val();
-        console.log(data)
+        if(data===null){
+           setResultList([])
+        }
+        else{
         let list = Object.values(data)
-        console.log(list)
         list.forEach((item, index) => {
             item.testInformation.id = Object.keys(data)[index]
         })
-        console.log(list)
         setResultList(list);
+        }
         })
         }, []);
-
+    
     
     const toggleDialog =()=>{
         setVisible(!visible);
@@ -75,6 +81,11 @@ export default function DeleteAndEditDog(props) {
 
     const toggleConfirmation =()=>{
         setDeleteConfirmationVisible(!deleteConfirmationVisible);
+    };
+
+    const getDogRegisterNumber = (item) =>{
+        const registerNumber = item.testInformation.registration
+        handleWebBrowser(registerNumber)
     };
 
     const handleWebBrowser = async(registerNumber)=>{
@@ -104,12 +115,9 @@ export default function DeleteAndEditDog(props) {
 
     const getDogId = (item) =>{
         setDogId(item.testInformation.id)
-    };
-        console.log(dogId)
-        console.log(testInformation)  
-  
+    };   
 
-    const mapRef =useRef();
+    //const mapRef =useRef();
 
     const findPlace=(place)=>{
         fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=${MAP_API_TOKEN}&location=${place}`)
@@ -126,129 +134,105 @@ export default function DeleteAndEditDog(props) {
         .catch(err => console.error(err))
     };
 
-    const openMapDialog =(place)=>{
+    const openMapDialog =(item)=>{
+        const testPlace = item.testInformation.place;
         setMapDialogVisible(true);
-        findPlace(place);    
+        findPlace(testPlace);    
     };  
     
     const closeMapDialog =()=>{
         setMapDialogVisible(false);
-        setPlace('');       
+        //setPlace('');       
     };
-
-    console.log(resultList)
 
   return(    
   <View style={styles.editdeletecontainer}>
     <View>
+        {resultList.length>0?
         <FlatList
         data={resultList}    
         renderItem={({item}) => 
-                <ListItem
-                bottomDivider
-                containerStyle={styles.listitemcontainer}
-                >
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.listitem}>Registration number: <Text style={styles.pressabletext}onPress={()=>{handleWebBrowser(item.testInformation.registration)}}>{item.testInformation.registration}</Text></ListItem.Title>
-                        <ListItem.Title style={styles.listitem}>Official name: {item.testInformation.offname}</ListItem.Title>
-                        <ListItem.Title style={styles.listitem}>Breed: {item.testInformation.breed}</ListItem.Title>
-                        <ListItem.Title style={styles.listitem}>Date: {item.testInformation.date}</ListItem.Title>
-                        <ListItem.Title style={styles.listitem}>Place: <Text style={styles.pressabletext} onPress={()=>openMapDialog(item.testInformation.place)}>{item.testInformation.place}</Text></ListItem.Title>
-                        <ListItem.Subtitle style={styles.listitem}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.listitem}>Result:{item.testInformation.result}</ListItem.Subtitle>
+            <ListItem
+            bottomDivider
+            containerStyle={styles.listitemcontainer}
+            >
+                <ListItem.Content>
+                    <ListItem.Title style={styles.listitem}>Registration number: <Text style={styles.pressabletext} onPress={()=>getDogRegisterNumber(item)}>{item.testInformation.registration}</Text></ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Official name: {item.testInformation.offname}</ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Breed: {item.testInformation.breed}</ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Date: {item.testInformation.date}</ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Place: <Text style={styles.pressabletext} onPress={()=>openMapDialog(item)}>{item.testInformation.place}</Text></ListItem.Title>
+                    <ListItem.Subtitle style={styles.listitem}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Result:{item.testInformation.result}</ListItem.Subtitle>
                         <View style={styles.firstendbutton}>
-                        <View style={styles.secondendbutton} />
-                        <Button
-                        title='Edit'
-                        buttonStyle={styles.editbuttoninlist}
-                        iconRight
-                        icon = {{
-                            name: 'pencil',
-                            type: 'font-awesome',
-                            size: 15,
-                            color: 'white',
-                        }}
-                        onPress={()=> {toggleDialog(); populateEdit(item)}}        
-                        />
-                        <Button
-                        title='Delete'
-                        buttonStyle={styles.deletebutton}
-                        iconRight
-                        icon = {{
-                            name: 'trash',
-                            type: 'font-awesome-5',
-                            size: 15,
-                            color: 'white',
-                        }}
-                        onPress={()=> {toggleConfirmation(); getDogId(item)}}       
-                        />
+                            <View style={styles.secondendbutton} />
+                                <Button
+                                title='Edit'
+                                buttonStyle={styles.editbuttoninlist}
+                                iconRight
+                                icon = {{
+                                    name: 'pencil',
+                                    type: 'font-awesome',
+                                    size: 15,
+                                    color: 'white',
+                                }}
+                                onPress={()=> {toggleDialog(); populateEdit(item)}}        
+                                />
+                                <Button
+                                title='Delete'
+                                buttonStyle={styles.deletebutton}
+                                iconRight
+                                icon = {{
+                                    name: 'trash',
+                                    type: 'font-awesome-5',
+                                    size: 15,
+                                    color: 'white',
+                                }}
+                                onPress={()=> {toggleConfirmation(); getDogId(item)}}       
+                                />
                         </View>        
-                    </ListItem.Content>
-                </ListItem>}
-        />
-  </View>
-  <View>
+                </ListItem.Content>
+            </ListItem>}
+        />:
+        <Text style={styles.emptydata}>No test results in the database</Text>}
+    </View>
+    <View>
         <EditDogDialog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
-        resultList={resultList}
-        setResultList={setResultList}
         testDate={testDate}
         setTestDate={setTestDate}
         visible={visible}
-        setVisible={setVisible}
         toggleDialog={toggleDialog}
         dogId={dogId}
-        setDogId={setDogId}
         />    
-  </View>
-  <View>
-    <DeleteConfirmation
-    deleteConfirmationVisible={deleteConfirmationVisible}
-    toggleConfirmation={toggleConfirmation}
-    dogId={dogId}
+    </View>
+    <View>
+        <DeleteConfirmation
+        deleteConfirmationVisible={deleteConfirmationVisible}
+        toggleConfirmation={toggleConfirmation}
+        dogId={dogId}
+        resultList={resultList}
+        setResultList={setResultList}   
+        />
+    </View>
+    <View>
+        <MapDialog
+        foundPlace={foundPlace}
+        mapDialogVisible={mapDialogVisible}
+        closeMapDialog={closeMapDialog}
+        />
 
-    />
-  </View>
-         <View>
-            <Dialog isVisible={mapDialogVisible} onBackdropPress={closeMapDialog} overlayStyle={styles.mapdialog}>
-                    <DialogTitle title='Place of test'/>
-                        <View style={styles.mapview}>
-                            <MapView 
-                                ref={mapRef}
-                                style={styles.mapsize}
-                                region={foundPlace}>
-                                    <Marker
-                                        coordinate={{
-                                        latitude: Number(foundPlace.latitude),
-                                        longitude: Number(foundPlace.longitude)
-                                        }}
-                                        title={foundPlace.place}/>
-                            </MapView>                    
-                        </View>
-                        <View style ={styles.closebuttoncontainer}  >
-                            <Button 
-                                buttonStyle={styles.closebutton}
-                                title='Close'
-                                iconRight
-                                icon = {{
-                                name: 'times',
-                                type: 'font-awesome',
-                                size: 15,
-                                color: '#FFFFFF',
-                            }} 
-                                onPress={closeMapDialog} />
-                        </View>
-            </Dialog>
-        </View>
-  </View>
+    </View>
+            
+</View>
   )
 }

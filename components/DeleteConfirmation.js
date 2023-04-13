@@ -16,16 +16,16 @@ import styles from '../Styles';
 //const app = initializeApp(firebaseConfig);
 //const database = getDatabase(app);
 
-const resultRef = ref(database,'testresults/')
+//const resultRef = ref(database,'testresults/')
 
 export default function DeleteConfirmation(props){
 
-    const {dogId, deleteConfirmationVisible, toggleConfirmation} = props;
+    const {dogId, deleteConfirmationVisible, toggleConfirmation, resultList, setResultList} = props;
            
-    const deleteDog =(id)=>{
-        const resultRef = ref(database, 'testresults/' + id)
-        remove(resultRef);
-        toggleConfirmation();  
+    const deleteDog =(id)=>{        
+            const resultRef = ref(database, 'testresults/' + id)
+            remove(resultRef);
+            toggleConfirmation();        
     };
     
 

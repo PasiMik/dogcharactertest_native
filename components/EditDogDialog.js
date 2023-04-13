@@ -20,7 +20,7 @@ import styles from '../Styles';
 
 export default function EditDogDialog(props){
     
-    const {testInformation, setTestInformation, resultList, setResultList, testDate, setTestDate, visible, setVisible, toggleDialog, dogId, setDogId} = props;
+    const {testInformation, setTestInformation, testDate, setTestDate, visible, toggleDialog, dogId,} = props;
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [editConfirmationVisible, setEditConfirmationVisible] =useState(false);  

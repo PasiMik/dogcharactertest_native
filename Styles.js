@@ -60,7 +60,7 @@ export default StyleSheet.create({
         flex:10,
     },
 
-    adddogcontainer: {//Addog styling
+    adddogcontainer: {//Add components' styling
         flex: 1,    
         justifyContent:'center',
         alignContent:'center',     
@@ -95,9 +95,13 @@ export default StyleSheet.create({
           justifyContent: 'space-around',
     },
 
-    editdeletecontainer: {
+    editdeletecontainer: { //edit and delete components' styling
         flex: 1,
         alignItems: 'center',
+    },
+    emptydata:{
+        color:'#FFFFFF',
+        fontSize:20,
     },
     scrollview:{
         backgroundColor: '#E5E4E2', 
@@ -169,7 +173,7 @@ export default StyleSheet.create({
         justifyContent:'center',
     },
     listitem:{
-        color:'#0F52BA',
+        color:'#40B5AD',
     },
     mapdialog:{
         backgroundColor:'#E5E4E2', 

@@ -28,7 +28,7 @@ export default function HomeScreen() {
   shot:'',
   result:'',
 });
-const [resultList, setResultList] = useState([]);
+//const [resultList, setResultList] = useState([]);
 const [testDate, setTestDate]= useState(new Date());
 
 const navigation = useNavigation();
@@ -84,8 +84,6 @@ const openInformation= async() => {
       <DeleteAndEditDog
         testInformation={testInformation}
         setTestInformation={setTestInformation}
-        resultList={resultList}
-        setResultList={setResultList}
         testDate={testDate}
         setTestDate={setTestDate}
         />

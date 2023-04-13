@@ -38,7 +38,6 @@ export default function LoginScreen(){
         });
     }, []);
 
-
     const handleSignUp = () =>{
         auth
         .createUserWithEmailAndPassword(email,password)
@@ -88,7 +87,7 @@ export default function LoginScreen(){
                 <Input
                 placeholder='Password'
                 label='Password'
-                secureTextEntry
+                secureTextEntry={true}
                 value={password}
                 onChangeText={text => setPassword(text)}
                 />

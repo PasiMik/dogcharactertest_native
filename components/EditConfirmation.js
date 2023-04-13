@@ -16,7 +16,6 @@ export default function EditConfirmation(props){
     const {testInformation, toggleDialog, dogId, editConfirmationVisible, toggleConfirmation} = props;
       
     const updateDog = (dogId, testInformation) =>{
-        console.log(dogId)
         const resultRef = ref(database, 'testresults/' + dogId)
         update(resultRef, {testInformation})
         toggleConfirmation();
