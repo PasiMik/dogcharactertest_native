@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/core';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, KeyboardAvoidingView } from 'react-native';
+import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, KeyboardAvoidingView, Alert} from 'react-native';
 import { Button,Input } from '@rneui/themed';
 import { Avatar } from '@rneui/themed';
 import { auth } from '../FirebaseConfig';
-import styles from '../Styles'; 
+import styles from '../Styles';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, } from 'react-native-alert-notification';
+
 //import firebaseConfig from '../FirebaseConfig';
 //import { initializeApp } from 'firebase/app';
 //mport { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
@@ -56,7 +58,13 @@ export default function LoginScreen(){
                 setEmailError('');
                 setPasswordError('');
             }else{
-                setPasswordError('Not satisfcatory password')
+                setPasswordError('Not strong enough password!')
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Not strong enough password',
+                    textBody: 'The password should contain one capital letter, one small letter, one number, and one special character!',                    
+                })
+
             };
         }else{
             setEmailError('This is not a valid email');
@@ -71,7 +79,36 @@ export default function LoginScreen(){
            const user = userCredentials.user;
            console.log('Logged in with',user.email) 
         })
-        .catch(err => console.error(err))
+        .catch(error => {
+            console.log(error);
+            if(error.code==='auth/invalid-email'){
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Wrong email',
+                    textBody: "Email doesn't exist!",
+                    
+                });
+            }
+            else if(error.code==='auth/wrong-password'){
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Wrong password',
+                    textBody: 'The password is invalid',
+                    
+                });
+            }
+            else if(error.code==='auth/missing-password'){
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Missing password',
+                    textBody: 'Please enter your password!',                    
+                });
+            }
+            else{
+                console.error(error);
+            }
+        }             
+        );
     
         setEmail('');
         setPassword('');
@@ -90,7 +127,7 @@ export default function LoginScreen(){
 
 
     return(      
-          
+        <AlertNotificationRoot>
         <KeyboardAvoidingView
         style={styles.logincontainer}
         behavior='padding'>            
@@ -131,7 +168,7 @@ export default function LoginScreen(){
                 />
             </View>
         </KeyboardAvoidingView>       
-
+    </AlertNotificationRoot> 
     )
 
 };

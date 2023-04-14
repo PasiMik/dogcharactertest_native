@@ -167,11 +167,11 @@ export default function DeleteAndEditDog(props) {
                     <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Desire to fight: {item.testInformation.fight}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Nerves: {item.testInformation.nerves}</ListItem.Subtitle>
-                    <ListItem.Subtitle style={styles.listitem}>Temperament:{item.testInformation.temperament}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Temperament: {item.testInformation.temperament}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Mental hardness: {item.testInformation.hardness}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Accessibility: {item.testInformation.accessibility}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Reaction to shots: {item.testInformation.shot}</ListItem.Subtitle>
-                    <ListItem.Subtitle style={styles.listitem}>Result:{item.testInformation.result}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.listitem}>Result: {item.testInformation.result}</ListItem.Subtitle>
                         <View style={styles.firstendbutton}>
                             <View style={styles.secondendbutton} />
                                 <Button
