@@ -17,6 +17,8 @@ export default function LoginScreen(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [image, setImage] =useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError]= useState('');
 
     const navigation = useNavigation();
 
@@ -39,16 +41,27 @@ export default function LoginScreen(){
     }, []);
 
     const handleSignUp = () =>{
-        auth
-        .createUserWithEmailAndPassword(email,password)
-        .then(userCredentials =>{
-           const user = userCredentials.user;
-           console.log('Registered with',user.email) 
-        })
-        .catch(err => console.error(err))
+        if(email.match(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm)){
+            if(password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)){
+                auth
+                .createUserWithEmailAndPassword(email,password)
+                .then(userCredentials =>{
+                    const user = userCredentials.user;
+                    console.log('Registered with',user.email) 
+                })
+                .catch(err => console.error(err))
     
-        setEmail('');
-        setPassword(''); 
+                setEmail('');
+                setPassword('');
+                setEmailError('');
+                setPasswordError('');
+            }else{
+                setPasswordError('Not satisfcatory password')
+            };
+        }else{
+            setEmailError('This is not a valid email');
+            
+        }    
     };
 
     const handleLogin = () =>{
@@ -61,8 +74,19 @@ export default function LoginScreen(){
         .catch(err => console.error(err))
     
         setEmail('');
-        setPassword(''); 
-    };   
+        setPassword('');
+        setEmailError(''); 
+    }; 
+    
+    const handleEmailChange = (text) => {
+        setEmail(text);
+        setEmailError('');
+    }
+
+    const handlePasswordChange = (text) => {
+        setPassword(text);
+        setPasswordError('');
+    }
 
 
     return(      
@@ -82,14 +106,16 @@ export default function LoginScreen(){
                 placeholder='Email'
                 label='Email'
                 value={email}
-                onChangeText={text =>setEmail(text)}
+                errorMessage ={`${emailError}`}
+                onChangeText={handleEmailChange}
                 />
                 <Input
                 placeholder='Password'
                 label='Password'
                 secureTextEntry={true}
                 value={password}
-                onChangeText={text => setPassword(text)}
+                errorMessage ={`${passwordError}`}
+                onChangeText={handlePasswordChange}
                 />
             </View>
             <View style={styles.inputButtons}>
