@@ -28,10 +28,23 @@ export default StyleSheet.create({
         alignItems:'center',
         marginBottom:25,
     },
+    forgetcontainer:{
+        marginTop:20,
+    },
+    forgettext:{
+        color:'#5D3FD3',
+        fontWeight: 'bold', 
+    },
 
     homecontainer: {//home styling
         flex: 1,
         alignItems: 'center',
+    },
+    headerleftcomponent:{
+        flexDirection:'row',
+    },
+    resetbutton:{
+        marginLeft:25,
     },
     firstheadercenter:{
         fontSize:16,
@@ -119,9 +132,17 @@ export default StyleSheet.create({
         flex:1, 
         flexDirection:'row', 
         justifyContent: 'flex-end',
+        marginTop:5,
     },
     secondendbutton:{
         flex:1,
+    },
+    emailbuttonlist:{
+        backgroundColor:'#6495ED',    
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: 30,
+        marginHorizontal: 5,
     },
     editbuttoninlist:{
         backgroundColor:'#FFD700',    

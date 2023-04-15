@@ -14,6 +14,8 @@ import { getDatabase, push, ref, onValue, update,remove } from 'firebase/databas
 import { database } from '../FirebaseConfig';
 import styles from '../Styles'; 
 import MapDialog from './MapDialog';
+import { ALERT_TYPE, AlertNotificationRoot, } from 'react-native-alert-notification';
+import * as MailComposer from 'expo-mail-composer';
 
 //const app = initializeApp(firebaseConfig);
 //const database = getDatabase(app);
@@ -37,6 +39,7 @@ export default function DeleteAndEditDog(props) {
     });
     const [deleteConfirmationVisible, setDeleteConfirmationVisible] =useState(false);  
     const [resultList, setResultList] = useState([]);
+    
    
     
 
@@ -144,8 +147,108 @@ export default function DeleteAndEditDog(props) {
         setMapDialogVisible(false);
         //setPlace('');       
     };
+    const sendEmail = (item) => {
+        const body =
+            `Here are the character tests results,
+            
+        Registration number: 
+        ${item.testInformation.registration}
+                        
+        Official name: 
+        ${item.testInformation.offname}
+                        
+        Breed: 
+        ${item.testInformation.breed}
+                    
+        Date: 
+        ${item.testInformation.date}
+                        
+        Place: 
+        ${item.testInformation.place}
+                        
+        Capability to function: 
+        ${item.testInformation.capability}
+                        
+        Tendency to aggressive behaviour: 
+        ${item.testInformation.behaviour}
+                        
+        Desire to defence: 
+        ${item.testInformation.defence}
+                        
+        Desire to fight: 
+        ${item.testInformation.fight}
+                        
+        Nerves: 
+        ${item.testInformation.nerves}
+                        
+        Temperament: 
+        ${item.testInformation.temperament}
+                        
+        Mental hardness: 
+        ${item.testInformation.hardness}
+                        
+        Accessibility: 
+        ${item.testInformation.accessibility}
+                        
+        Reaction to shots: 
+        ${item.testInformation.shot}
+                        
+        Result: 
+        ${item.testInformation.result}`
+
+        MailComposer.composeAsync({
+            subject:`${item.testInformation.registration} ${item.testInformation.offname} dog character test results`,
+            body: body/*`Here are the character tests results,
+            
+Registration number: 
+${item.testInformation.registration}
+            
+Official name: 
+${item.testInformation.offname}
+            
+Breed: 
+${item.testInformation.breed}
+            
+ Date: 
+${item.testInformation.date}
+            
+Place: 
+${item.testInformation.place}
+            
+Capability to function: 
+${item.testInformation.capability}
+            
+Tendency to aggressive behaviour: 
+${item.testInformation.behaviour}
+            
+Desire to defence: 
+${item.testInformation.defence}
+            
+Desire to fight: 
+${item.testInformation.fight}
+            
+Nerves: 
+${item.testInformation.nerves}
+            
+Temperament: 
+${item.testInformation.temperament}
+            
+Mental hardness: 
+${item.testInformation.hardness}
+            
+Accessibility: 
+${item.testInformation.accessibility}
+            
+Reaction to shots: 
+${item.testInformation.shot}
+            
+Result: 
+${item.testInformation.result}`*/, 
+        });
+    }
 
   return(    
+    <AlertNotificationRoot>
   <View style={styles.editdeletecontainer}>
     <View>
         {resultList.length>0?
@@ -174,6 +277,18 @@ export default function DeleteAndEditDog(props) {
                     <ListItem.Subtitle style={styles.listitem}>Result: {item.testInformation.result}</ListItem.Subtitle>
                         <View style={styles.firstendbutton}>
                             <View style={styles.secondendbutton} />
+                                <Button
+                                title='Send email'
+                                buttonStyle={styles.emailbuttonlist}
+                                iconRight
+                                icon = {{
+                                    name: 'envelope',
+                                    type: 'font-awesome',
+                                    size: 15,
+                                    color: 'white',
+                                }}
+                                onPress={() => sendEmail(item)}        
+                                />
                                 <Button
                                 title='Edit'
                                 buttonStyle={styles.editbuttoninlist}
@@ -234,5 +349,6 @@ export default function DeleteAndEditDog(props) {
     </View>
             
 </View>
+</AlertNotificationRoot>
   )
 }

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/core';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, KeyboardAvoidingView, Alert} from 'react-native';
+import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, KeyboardAvoidingView, Alert, TouchableOpacity} from 'react-native';
 import { Button,Input } from '@rneui/themed';
 import { Avatar } from '@rneui/themed';
 import { auth } from '../FirebaseConfig';
@@ -70,7 +70,7 @@ export default function LoginScreen(){
             setEmailError('This is not a valid email');
             
         }    
-    };
+    };    
 
     const handleLogin = () =>{
         auth
@@ -125,6 +125,28 @@ export default function LoginScreen(){
         setPasswordError('');
     }
 
+    const forgetPassword = () => {
+        auth
+        .sendPasswordResetEmail(email)
+        .then(() =>{
+            Dialog.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Password reset',
+                textBody: 'Password reset email sent!',
+            })     
+        })
+        .catch((error) => {
+            if(error.code === 'auth/missing-email'){
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Missing email',
+                    textBody: 'Please enter your email in the email field!',
+                })   
+            }
+        })
+    }        
+
+
 
     return(      
         <AlertNotificationRoot>
@@ -166,6 +188,12 @@ export default function LoginScreen(){
                 buttonStyle ={styles.registerbutton}
                 onPress={handleSignUp}
                 />
+            </View>
+            <View style={styles.forgetcontainer}>
+            <TouchableOpacity
+            onPress={()=>{forgetPassword()}}            >            
+                <Text style={styles.forgettext}>Forgot password?</Text>
+            </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>       
     </AlertNotificationRoot> 

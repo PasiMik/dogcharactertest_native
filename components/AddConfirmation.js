@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView, KeyboardAvoidingView } from 'react-native';
+import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import { Dialog, Button,Input } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
+import { ALERT_TYPE, Toast, AlertNotificationRoot, } from 'react-native-alert-notification';
 //import firebaseConfig from '../FirebaseConfig';
 //import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
@@ -15,34 +16,53 @@ export default function AddConfirmation(props){
 
     const {testInformation, setTestInformation, toggleDialog, addConfirmationVisible, toggleConfirmation,} = props;
 
-        const addDog = () =>{
-            push(
-                resultRef,
-                {'testInformation': testInformation});
+    const addDog = () =>{
+        push(
+            resultRef,
+            {'testInformation': testInformation})
+        .then(() =>{    
+        toggleConfirmation();
+        toggleDialog();        
+        setTestInformation({  
+            date:'', 
+            place:'',
+            breed:'',
+            offname:'',
+            registration:'',
+            capability:'',
+            behaviour:'',
+            defence:'',
+            fight:'',
+            nerves:'',
+            temperament:'',
+            hardness:'',
+            accessibility:'',
+            shot:'',
+            result:'',
+         });        
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Dog added',
+                textBody: 'Dog added succesfully!',
+                autoClose: 2000,
+            }); 
+         })
+         .catch((error)=>{
             toggleConfirmation();
-            toggleDialog();        
-            setTestInformation({  
-                date:'', 
-                place:'',
-                breed:'',
-                offname:'',
-                registration:'',
-                capability:'',
-                behaviour:'',
-                defence:'',
-                fight:'',
-                nerves:'',
-                temperament:'',
-                hardness:'',
-                accessibility:'',
-                shot:'',
-                result:'',
-             });
-          };
+            toggleDialog(); 
+            Toast.show({
+                type: ALERT_TYPE.DANGER,
+                title: 'Dog not added',
+                textBody: `${error.code}`,
+                autoClose: 2000,
+            }); 
+         })        
+      };
     
     
 
     return(
+        
         <View>            
             <Dialog isVisible={addConfirmationVisible} onBackdropPress={toggleConfirmation}>
             <DialogTitle title='Are you sure you want to add a new dog?'/>                               
@@ -74,5 +94,6 @@ export default function AddConfirmation(props){
             </View>
             </Dialog>
         </View>
+        
     )
 };

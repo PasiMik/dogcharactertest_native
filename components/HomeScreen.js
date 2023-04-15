@@ -7,6 +7,7 @@ import { auth } from '../FirebaseConfig';
 import {useNavigation} from '@react-navigation/core';
 import { Header, Icon } from '@rneui/base';
 import { TouchableOpacity } from 'react-native';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, } from 'react-native-alert-notification';
 import styles from '../Styles'; 
 
 export default function HomeScreen() {
@@ -41,12 +42,28 @@ const handleSignOut = () =>{
     .catch(err =>console.error(err))
 };
 
+const changePassword = () => {
+  const userEmail = auth.currentUser.email;
+  auth
+  .sendPasswordResetEmail(userEmail)
+  .then(() =>{
+      Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Password reset',
+          textBody: 'Password reset email sent!',
+      })     
+  })
+  .catch((error) => {
+      console.log(error.code)              
+  })
+};  
+
 const openInformation= async() => {
   await WebBrowser.openBrowserAsync('https://www.kennelliitto.fi/kasvatus-ja-terveys/koiran-luonne-ja-kayttaytyminen/luonnetesti');
 };
 
   return (
-    
+    <AlertNotificationRoot>
     <View style={styles.homecontainer}>
       <ImageBackground
       source={require('../assets/Jetro_head.jpg')}
@@ -54,11 +71,20 @@ const openInformation= async() => {
       <Header 
       backgroundColor='#000000'
       leftComponent={
-        <TouchableOpacity
+        <View style={styles.headerleftcomponent}>
+          <TouchableOpacity
               onPress={handleSignOut}>
               <Icon  type="simple-line-icon" name="logout" color="#FFFFFF"/>
-              </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity
+              onPress={changePassword}
+              style={styles.resetbutton}>
+              <Icon  type="font-awesome" name="key" color="#FFFFFF"/>
+          </TouchableOpacity>
+              
+        </View>      
       }
+
       centerComponent={
         <View>
           <Text style={styles.firstheadercenter}>Dog character test app</Text>
@@ -89,6 +115,7 @@ const openInformation= async() => {
         />
       </View>      
       </View>
+      </AlertNotificationRoot>
   );
 }
 

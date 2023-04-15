@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Dialog, Button,Input } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
+import { ALERT_TYPE, Toast, AlertNotificationRoot, } from 'react-native-alert-notification';
 //import firebaseConfig from '../FirebaseConfig';
 //import { initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, onValue,remove, update } from 'firebase/database';
@@ -17,9 +18,27 @@ export default function EditConfirmation(props){
       
     const updateDog = (dogId, testInformation) =>{
         const resultRef = ref(database, 'testresults/' + dogId)
-        update(resultRef, {testInformation})
-        toggleConfirmation();
-        toggleDialog()
+        update(resultRef, {testInformation})        
+        .then(() =>{    
+            toggleConfirmation()
+            toggleDialog()         
+                Toast.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'Dog updated',
+                    textBody: 'Dog updated succesfully!',
+                    autoClose: 2000,
+                }); 
+             })
+             .catch((error)=>{
+                toggleConfirmation();
+                toggleDialog(); 
+                Toast.show({
+                    type: ALERT_TYPE.DANGER,
+                    title: 'Dog not added',
+                    textBody: `${error.code}`,
+                    autoClose: 2000,
+                });
+             })   
     };      
     
 
