@@ -44,7 +44,7 @@ export default function EditConfirmation(props){
 
     return(
         <View>            
-            <Dialog isVisible={editConfirmationVisible} onBackdropPress={toggleConfirmation}>
+            <Dialog isVisible={editConfirmationVisible} onBackdropPress={toggleConfirmation} overlayStyle={styles.confirmationdialog}>
             <DialogTitle title="Are you sure you want to update the dog's information?"/>                               
             <View style={styles.bottombuttoncontainer}>
             <Button

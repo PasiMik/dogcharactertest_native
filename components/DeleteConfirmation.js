@@ -51,7 +51,7 @@ export default function DeleteConfirmation(props){
 
     return(
         <View>            
-            <Dialog isVisible={deleteConfirmationVisible} onBackdropPress={toggleConfirmation}>
+            <Dialog isVisible={deleteConfirmationVisible} onBackdropPress={toggleConfirmation} overlayStyle={styles.confirmationdialog}>
             <DialogTitle title="Are you sure you want to delete the dog?"/>                               
             <View style={styles.bottombuttoncontainer}>
             <Button

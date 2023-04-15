@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
+import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { Dialog, Button, Input, ListItem, Icon } from '@rneui/themed';
 //import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import * as WebBrowser from 'expo-web-browser';
@@ -149,7 +149,7 @@ export default function DeleteAndEditDog(props) {
     };
     const sendEmail = (item) => {
         const body =
-            `Here are the character tests results,
+        `Here are the character tests results,
             
         Registration number: 
         ${item.testInformation.registration}
@@ -198,52 +198,7 @@ export default function DeleteAndEditDog(props) {
 
         MailComposer.composeAsync({
             subject:`${item.testInformation.registration} ${item.testInformation.offname} dog character test results`,
-            body: body/*`Here are the character tests results,
-            
-Registration number: 
-${item.testInformation.registration}
-            
-Official name: 
-${item.testInformation.offname}
-            
-Breed: 
-${item.testInformation.breed}
-            
- Date: 
-${item.testInformation.date}
-            
-Place: 
-${item.testInformation.place}
-            
-Capability to function: 
-${item.testInformation.capability}
-            
-Tendency to aggressive behaviour: 
-${item.testInformation.behaviour}
-            
-Desire to defence: 
-${item.testInformation.defence}
-            
-Desire to fight: 
-${item.testInformation.fight}
-            
-Nerves: 
-${item.testInformation.nerves}
-            
-Temperament: 
-${item.testInformation.temperament}
-            
-Mental hardness: 
-${item.testInformation.hardness}
-            
-Accessibility: 
-${item.testInformation.accessibility}
-            
-Reaction to shots: 
-${item.testInformation.shot}
-            
-Result: 
-${item.testInformation.result}`*/, 
+            body: body, 
         });
     }
 
@@ -260,11 +215,11 @@ ${item.testInformation.result}`*/,
             containerStyle={styles.listitemcontainer}
             >
                 <ListItem.Content>
-                    <ListItem.Title style={styles.listitem}>Registration number: <Text style={styles.pressabletext} onPress={()=>getDogRegisterNumber(item)}>{item.testInformation.registration}</Text></ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Registration number: <TouchableOpacity onPress={()=>getDogRegisterNumber(item)}><Text style={styles.pressabletext}>{item.testInformation.registration}</Text></TouchableOpacity></ListItem.Title>
                     <ListItem.Title style={styles.listitem}>Official name: {item.testInformation.offname}</ListItem.Title>
                     <ListItem.Title style={styles.listitem}>Breed: {item.testInformation.breed}</ListItem.Title>
                     <ListItem.Title style={styles.listitem}>Date: {item.testInformation.date}</ListItem.Title>
-                    <ListItem.Title style={styles.listitem}>Place: <Text style={styles.pressabletext} onPress={()=>openMapDialog(item)}>{item.testInformation.place}</Text></ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Place: <TouchableOpacity onPress={()=>openMapDialog(item)}><Text style={styles.pressabletext}>{item.testInformation.place}</Text></TouchableOpacity></ListItem.Title>
                     <ListItem.Subtitle style={styles.listitem}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>

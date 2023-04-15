@@ -48,7 +48,7 @@ export default function EditDogDialog(props){
 return(
     <View>
         <View>
-        <Dialog isVisible={visible} onBackdropPress={toggleDialog} >
+        <Dialog isVisible={visible} onBackdropPress={toggleDialog} overlayStyle={styles.dialogwidth} >
             <ScrollView style={styles.scrollview}>
                 <View>
                     <DialogTitle title='Edit the dog'/>

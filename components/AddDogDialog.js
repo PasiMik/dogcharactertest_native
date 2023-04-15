@@ -43,7 +43,7 @@ export default function AddDogDialog(props){
 return(
     <View>
             <View>
-            <Dialog isVisible={visible} onBackdropPress={toggleDialog} >
+            <Dialog isVisible={visible} onBackdropPress={toggleDialog} overlayStyle={styles.dialogwidth} >
                 <ScrollView style={styles.scrollview}>
                 <View>
                 <DialogTitle title='Add a new dog'/>

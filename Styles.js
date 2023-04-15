@@ -78,10 +78,13 @@ export default StyleSheet.create({
         justifyContent:'center',
         alignContent:'center',     
     },
-    scrollview:{
-        backgroundColor: '#E5E4E2', 
+    dialogwidth:{
+        width:'80%',
+        backgroundColor:'#E5E4E2',
+    },
+    scrollview:{ 
         marginHorizontal:-20,
-        marginVertical:-20,
+        marginVertical:-20,        
     },
     addbutton:{
           backgroundColor:'#32CD32',    
@@ -115,11 +118,6 @@ export default StyleSheet.create({
     emptydata:{
         color:'#FFFFFF',
         fontSize:20,
-    },
-    scrollview:{
-        backgroundColor: '#E5E4E2', 
-        marginHorizontal:-20,
-        marginVertical:-20,
     },
     listitemcontainer:{
         backgroundColor:'transparent', 
@@ -207,4 +205,7 @@ export default StyleSheet.create({
         width:'100%', 
         height:'100%',
     },
+    confirmationdialog:{
+        backgroundColor:'#E5E4E2',
+    }
 });

@@ -64,7 +64,7 @@ export default function AddConfirmation(props){
     return(
         
         <View>            
-            <Dialog isVisible={addConfirmationVisible} onBackdropPress={toggleConfirmation}>
+            <Dialog isVisible={addConfirmationVisible} onBackdropPress={toggleConfirmation} overlayStyle={styles.confirmationdialog}>
             <DialogTitle title='Are you sure you want to add a new dog?'/>                               
             <View style={styles.bottombuttoncontainer}>
             <Button
