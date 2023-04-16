@@ -3,14 +3,9 @@ import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView
 import { Dialog, Button,Input } from '@rneui/themed';
 import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
 import AddConfirmation from './AddConfirmation';
-//import firebaseConfig from '../FirebaseConfig';
-//import { initializeApp } from 'firebase/app';
-//import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
 import DateTimePicker from '@react-native-community/datetimepicker';
-//import { database } from '../FirebaseConfig';
 import styles from '../Styles';
 
-//const resultRef = ref(database, 'testresults/')
 
 export default function AddDogDialog(props){
 

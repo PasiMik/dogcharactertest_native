@@ -1,24 +1,16 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView, TouchableOpacity } from 'react-native';
-import { Dialog, Button, Input, ListItem, Icon } from '@rneui/themed';
-//import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
+import React, {useState, useEffect,} from 'react';
+import {Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Button, ListItem, } from '@rneui/themed';
 import * as WebBrowser from 'expo-web-browser';
-//import MapView, {Marker} from 'react-native-maps';
-//import DateTimePicker from '@react-native-community/datetimepicker';
 import {MAP_API_TOKEN} from '@env';
 import EditDogDialog from './EditDogDialog';
 import DeleteConfirmation from './DeleteConfirmation';
-//import firebaseConfig from '../FirebaseConfig';
-//import { initializeApp } from 'firebase/app';
-import { getDatabase, push, ref, onValue, update,remove } from 'firebase/database';
+import { ref, onValue,} from 'firebase/database';
 import { database } from '../FirebaseConfig';
 import styles from '../Styles'; 
 import MapDialog from './MapDialog';
-import { ALERT_TYPE, AlertNotificationRoot, } from 'react-native-alert-notification';
+import { AlertNotificationRoot, } from 'react-native-alert-notification';
 import * as MailComposer from 'expo-mail-composer';
-
-//const app = initializeApp(firebaseConfig);
-//const database = getDatabase(app);
 
 const resultRef = ref(database,'testresults/')
 
@@ -27,8 +19,6 @@ export default function DeleteAndEditDog(props) {
     const {testInformation, setTestInformation, testDate, setTestDate,} = props;
     const [visible, setVisible] =useState(false);
     const [dogId, setDogId] = useState('');
-    //const [registerNumber, setRegisterNumber] = useState('');
-    //const [place, setPlace] =useState('');
     const [mapDialogVisible, setMapDialogVisible] = useState(false)
     const [foundPlace, setFoundPlace]=useState({
         latitude: 60.17116,
@@ -120,7 +110,6 @@ export default function DeleteAndEditDog(props) {
         setDogId(item.testInformation.id)
     };   
 
-    //const mapRef =useRef();
 
     const findPlace=(place)=>{
         fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=${MAP_API_TOKEN}&location=${place}`)
@@ -144,9 +133,9 @@ export default function DeleteAndEditDog(props) {
     };  
     
     const closeMapDialog =()=>{
-        setMapDialogVisible(false);
-        //setPlace('');       
+        setMapDialogVisible(false);     
     };
+
     const sendEmail = (item) => {
         const body =
         `Here are the character tests results,
@@ -197,10 +186,10 @@ export default function DeleteAndEditDog(props) {
         ${item.testInformation.result}`
 
         MailComposer.composeAsync({
-            subject:`${item.testInformation.registration} ${item.testInformation.offname} dog character test results`,
+            subject:`${item.testInformation.registration} ${item.testInformation.offname} character test results`,
             body: body, 
         });
-    }
+    };
 
   return(    
     <AlertNotificationRoot>
@@ -289,9 +278,7 @@ export default function DeleteAndEditDog(props) {
         <DeleteConfirmation
         deleteConfirmationVisible={deleteConfirmationVisible}
         toggleConfirmation={toggleConfirmation}
-        dogId={dogId}
-        resultList={resultList}
-        setResultList={setResultList}   
+        dogId={dogId}  
         />
     </View>
     <View>
@@ -300,10 +287,8 @@ export default function DeleteAndEditDog(props) {
         mapDialogVisible={mapDialogVisible}
         closeMapDialog={closeMapDialog}
         />
-
-    </View>
-            
+    </View>            
 </View>
 </AlertNotificationRoot>
   )
-}
+};

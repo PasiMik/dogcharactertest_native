@@ -1,21 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native';
-import { Dialog, Button,Input } from '@rneui/themed';
-//import { DialogTitle } from '@rneui/base/dist/Dialog/Dialog.Title';
-//import firebaseConfig from '../FirebaseConfig';
-//import { initializeApp } from 'firebase/app';
-//import { getDatabase, push, ref, onValue,remove } from 'firebase/database';
-//import DateTimePicker from '@react-native-community/datetimepicker';
-//import { database } from '../FirebaseConfig';
+import React, {useState,} from 'react';
+import {View,} from 'react-native';
+import {Button,} from '@rneui/themed';
 import styles from '../Styles';
 import AddDogDialog from './AddDogDialog';
-//import AddConfirmation from './AddConfirmation'; 
-
-
-//const app = initializeApp(firebaseConfig);
-//const database = getDatabase(app);
-
-//const resultRef = ref(database, 'testresults/')
 
 export default function AddDog(props){
     const {testInformation, setTestInformation, testDate, setTestDate} = props;
@@ -41,11 +28,8 @@ export default function AddDog(props){
             shot:'',
             result:'',
         }); 
-    };
-
-     
-      //console.log(testList)
-
+    };   
+      
       return(
         <View style={styles.adddogcontainer}>
             <View>

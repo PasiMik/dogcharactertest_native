@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import React, {useState,} from 'react';
+import {ImageBackground, Text, View,} from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import AddDog from './AddDog';
 import DeleteAndEditDog from './DeleteAndEditDog';
@@ -29,7 +29,7 @@ export default function HomeScreen() {
   shot:'',
   result:'',
 });
-//const [resultList, setResultList] = useState([]);
+
 const [testDate, setTestDate]= useState(new Date());
 
 const navigation = useNavigation();
@@ -117,5 +117,5 @@ const openInformation= async() => {
       </View>
       </AlertNotificationRoot>
   );
-}
+};
 

@@ -1,18 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/core';
-import {ImageBackground, StyleSheet, Text, View, TextInput, FlatList, KeyboardAvoidingView, Alert, TouchableOpacity} from 'react-native';
+import {Text, View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import { Button,Input } from '@rneui/themed';
 import { Avatar } from '@rneui/themed';
 import { auth } from '../FirebaseConfig';
 import styles from '../Styles';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, } from 'react-native-alert-notification';
 
-//import firebaseConfig from '../FirebaseConfig';
-//import { initializeApp } from 'firebase/app';
-//mport { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-
-//const app = initializeApp(firebaseConfig);
-//const auth = getAuth(app);
 
 export default function LoginScreen(){
 
@@ -49,7 +43,6 @@ export default function LoginScreen(){
                 .createUserWithEmailAndPassword(email,password)
                 .then(userCredentials =>{
                     const user = userCredentials.user;
-                    console.log('Registered with',user.email) 
                 })
                 .catch(err => console.error(err))
     
@@ -57,7 +50,7 @@ export default function LoginScreen(){
                 setPassword('');
                 setEmailError('');
                 setPasswordError('');
-            }else{
+            }else {
                 setPasswordError('Not strong enough password!')
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
@@ -77,7 +70,6 @@ export default function LoginScreen(){
         .signInWithEmailAndPassword(email,password)
         .then(userCredentials =>{
            const user = userCredentials.user;
-           console.log('Logged in with',user.email) 
         })
         .catch(error => {
             console.log(error);
@@ -88,13 +80,13 @@ export default function LoginScreen(){
                     textBody: "Email doesn't exist!",
                     
                 });
+                setEmail('');
             }
             else if(error.code==='auth/wrong-password'){
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
                     title: 'Wrong password',
-                    textBody: 'The password is invalid',
-                    
+                    textBody: 'The password is invalid',                    
                 });
             }
             else if(error.code==='auth/missing-password'){
@@ -104,13 +96,12 @@ export default function LoginScreen(){
                     textBody: 'Please enter your password!',                    
                 });
             }
-            else{
+            else {
                 console.error(error);
-            }
+            };
         }             
         );
     
-        setEmail('');
         setPassword('');
         setEmailError(''); 
     }; 
@@ -133,7 +124,7 @@ export default function LoginScreen(){
                 type: ALERT_TYPE.SUCCESS,
                 title: 'Password reset',
                 textBody: 'Password reset email sent!',
-            })     
+            });     
         })
         .catch((error) => {
             if(error.code === 'auth/missing-email'){
@@ -141,10 +132,10 @@ export default function LoginScreen(){
                     type: ALERT_TYPE.WARNING,
                     title: 'Missing email',
                     textBody: 'Please enter your email in the email field!',
-                })   
-            }
+                });   
+            };
         })
-    }        
+    };        
 
 
 
@@ -198,6 +189,5 @@ export default function LoginScreen(){
         </KeyboardAvoidingView>       
     </AlertNotificationRoot> 
     )
-
 };
 
