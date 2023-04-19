@@ -115,9 +115,21 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
     },
+    searchbarcontainer:{
+        backgroundColor:'#00000000', 
+        width:350, 
+        alignSelf:'center',
+    },
+    searchbarinput:{
+        backgroundColor: '#E5E4E2',
+    },
+    datatextcontainer:{
+        width:350,
+    },
     emptydata:{
         color:'#FFFFFF',
         fontSize:20,
+        alignSelf:'center'
     },
     listitemcontainer:{
         backgroundColor:'transparent', 

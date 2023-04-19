@@ -11,6 +11,7 @@ import styles from '../Styles';
 import MapDialog from './MapDialog';
 import { AlertNotificationRoot, } from 'react-native-alert-notification';
 import * as MailComposer from 'expo-mail-composer';
+import { SearchBar } from '@rneui/themed';
 
 const resultRef = ref(database,'testresults/')
 
@@ -29,6 +30,9 @@ export default function DeleteAndEditDog(props) {
     });
     const [deleteConfirmationVisible, setDeleteConfirmationVisible] =useState(false);  
     const [resultList, setResultList] = useState([]);
+    const [originalList, setOriginalList] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [search, setSearch] = useState(false);
     
    
     
@@ -38,7 +42,9 @@ export default function DeleteAndEditDog(props) {
         onValue(resultRef, (snapshot) => {
         const data = snapshot.val();
         if(data===null){
-           setResultList([])
+           setResultList([]);
+           setOriginalList([]);
+           setSearch(false);
         }
         else{
         let list = Object.values(data)
@@ -46,10 +52,33 @@ export default function DeleteAndEditDog(props) {
             item.testInformation.id = Object.keys(data)[index]
         })
         setResultList(list);
+        setOriginalList(list);
         }
         })
         }, []);
+
+    const handleSearch = (query) => {
+       
+        setSearchQuery(query);
+        if (query === '') {            
+            setResultList(originalList)            
+            return;
+        }
+        const filteredResults = resultList.filter((result) =>
+            result.testInformation.offname
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        );
+
+        if (filteredResults.length === 0) {
+            setSearch(true);
+            console.log('hei')
+        } 
+        setResultList(filteredResults);
+        
+    };
     
+
     
     const toggleDialog =()=>{
         setVisible(!visible);
@@ -134,7 +163,7 @@ export default function DeleteAndEditDog(props) {
     
     const closeMapDialog =()=>{
         setMapDialogVisible(false);     
-    };
+    };    
 
     const sendEmail = (item) => {
         const body =
@@ -194,8 +223,17 @@ export default function DeleteAndEditDog(props) {
   return(    
     <AlertNotificationRoot>
   <View style={styles.editdeletecontainer}>
-    <View>
-        {resultList.length>0?
+    <View> 
+     <View>  
+    <SearchBar 
+        placeholder = "Dog's official name" 
+        round={true} containerStyle={styles.searchbarcontainer} 
+        inputContainerStyle={styles.searchbarinput}
+        value={searchQuery}
+        onChangeText={handleSearch}
+        />
+     </View>      
+        {resultList.length>0 && 
         <FlatList
         data={resultList}    
         renderItem={({item}) => 
@@ -204,11 +242,11 @@ export default function DeleteAndEditDog(props) {
             containerStyle={styles.listitemcontainer}
             >
                 <ListItem.Content>
-                    <ListItem.Title style={styles.listitem}>Registration number: <TouchableOpacity onPress={()=>getDogRegisterNumber(item)}><Text style={styles.pressabletext}>{item.testInformation.registration}</Text></TouchableOpacity></ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Registration number: <Text onPress={()=>getDogRegisterNumber(item)} style={styles.pressabletext}>{item.testInformation.registration}</Text></ListItem.Title>
                     <ListItem.Title style={styles.listitem}>Official name: {item.testInformation.offname}</ListItem.Title>
                     <ListItem.Title style={styles.listitem}>Breed: {item.testInformation.breed}</ListItem.Title>
                     <ListItem.Title style={styles.listitem}>Date: {item.testInformation.date}</ListItem.Title>
-                    <ListItem.Title style={styles.listitem}>Place: <TouchableOpacity onPress={()=>openMapDialog(item)}><Text style={styles.pressabletext}>{item.testInformation.place}</Text></TouchableOpacity></ListItem.Title>
+                    <ListItem.Title style={styles.listitem}>Place: <Text onPress={()=>openMapDialog(item)}style={styles.pressabletext}>{item.testInformation.place}</Text></ListItem.Title>
                     <ListItem.Subtitle style={styles.listitem}>Capability to function: {item.testInformation.capability}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Tendency to aggressive behaviour: {item.testInformation.behaviour}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.listitem}>Desire to defence: {item.testInformation.defence}</ListItem.Subtitle>
@@ -260,8 +298,11 @@ export default function DeleteAndEditDog(props) {
                         </View>        
                 </ListItem.Content>
             </ListItem>}
-        />:
-        <Text style={styles.emptydata}>No test results in the database</Text>}
+        />}
+        <View style={styles.datatextcontainer}>
+        {resultList.length === 0 && !search && <Text style={styles.emptydata}>No test results in the database!</Text>}
+        {resultList.length === 0 && search && <Text style={styles.emptydata}>No search results!</Text>}
+        </View>
     </View>
     <View>
         <EditDogDialog

@@ -73,7 +73,7 @@ export default function LoginScreen(){
         })
         .catch(error => {
             console.log(error);
-            if(error.code==='auth/invalid-email'){
+            if(error.code==='auth/invalid-email'||error.code==='auth/user-not-found'){
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
                     title: 'Wrong email',
@@ -81,7 +81,7 @@ export default function LoginScreen(){
                     
                 });
                 setEmail('');
-            }
+            }            
             else if(error.code==='auth/wrong-password'){
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
