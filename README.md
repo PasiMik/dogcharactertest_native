@@ -11,4 +11,4 @@ and WebBrowser for accessing the dog's info on Finnish kennel club page.
 
 - React native elements - Avatar, Dialog, Header,Input, ListItem, SearchBar, Text - to help with the styling of the app and adding some additional functionalities.
 
--React Native alert notification for dialog and toast notifications. 
+- React Native alert notification for dialog and toast notifications. 
