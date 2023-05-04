@@ -72,7 +72,6 @@ export default function LoginScreen(){
            const user = userCredentials.user;
         })
         .catch(error => {
-            console.log(error);
             if(error.code==='auth/invalid-email'||error.code==='auth/user-not-found'){
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,

@@ -72,7 +72,7 @@ export default function DeleteAndEditDog(props) {
 
         if (filteredResults.length === 0) {
             setSearch(true);
-            console.log('hei')
+            
         } 
         setResultList(filteredResults);
         
